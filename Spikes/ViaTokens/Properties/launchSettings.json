@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ViaTokens": {
+      "commandName": "Project",
+      "commandLineArgs": "place_token_here WhippingBoy"
+    }
+  }
+}
