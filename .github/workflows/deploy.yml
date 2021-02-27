@@ -1,6 +1,4 @@
 name: Deploy
-author: Arsanukaev Adam
-description: Test, deploy and release solution to Heroku
 
 on:
   push:
