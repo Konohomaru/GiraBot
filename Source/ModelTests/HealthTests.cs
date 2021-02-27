@@ -3,12 +3,12 @@ using Xunit;
 
 namespace ModelTests
 {
-	public class CheckTests
+	public class HealthTests
     {
         [Fact]
         public void Status_Get_Ok()
         {
-            Assert.Equal("Ok...", Check.Status);
+            Assert.Equal("Ok", Health.Status);
         }
     }
 }

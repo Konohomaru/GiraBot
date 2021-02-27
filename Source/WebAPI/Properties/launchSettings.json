@@ -6,7 +6,7 @@
       "commandName": "Project",
       "dotnetRunMessages": "true",
       "launchBrowser": true,
-      "launchUrl": "check",
+      "launchUrl": "health",
       "applicationUrl": "https://localhost:5000"
     }
   }
