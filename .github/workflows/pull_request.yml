@@ -3,7 +3,7 @@ name: On pull request
 on:
   pull_request:
     branches-ignore:
-      - *doc
+      - '*doc'
 
 jobs:
   build:
