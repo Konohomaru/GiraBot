@@ -5,16 +5,15 @@ EXPOSE 80
 ENV ASPNETCORE_URLS=http://+:80
 
 WORKDIR /app
-COPY Source/Model/ src/Model/
-COPY Source/WebAPI/ src/WebAPI/
+COPY Source/ src/
 
-# Restore projects.
-RUN dotnet restore src/Model/
-RUN dotnet restore src/WebAPI/
+# Restore and build entire solution.
+RUN dotnet restore src/
+RUN dotnet build -c Release --nologo --no-restore src/
+RUN dotnet build --nologo --no-restore src/ModelTests/
 
-# Build projects.
-RUN dotnet build -c Release --nologo --no-restore src/Model/
-RUN dotnet build -c Release --nologo --no-restore src/WebAPI/
+# Run tests.
+RUN dotnet test --no-build --nologo -v quiet src/ModelTests/
 
 # Publish WebAPI.
 RUN dotnet publish -o publish/ -c Release --no-build --nologo src/WebAPI/
