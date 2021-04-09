@@ -26,16 +26,16 @@ namespace ViaTokens
 				(await client.User.Current()).Login,
 				repoName,
 				new RepositoryIssueRequest { State = ItemStateFilter.All });
-
+			
 			WriteLine("Processed issues:");
 			foreach (var issue in repoIssues)
 				WriteLine($"\t{issue.Number}. {issue.Title} (state: {issue.State}).");
-
+			
 			// Считаем число закрытых issues, которые будут закрытыми задачами.
 			var closedIssuesCount = repoIssues.Count(issue => issue.State == ItemState.Closed);
-
+			
 			WriteLine($"Sprint Burndown is {closedIssuesCount}/{repoIssues.Count}.");
-
+			
 			// Чтобы консольное окно не закрывалось сразу после вывода.
 			ReadKey();
 		}
