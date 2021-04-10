@@ -20,4 +20,4 @@ COPY --from=sdk app/publish/ .
 
 # Run WebAPI.
 # Using CMD instead of ENTRYPOINT and such ASPNETCORE_URLS requested from Heroku Dyno.
-CMD ASPNETCORE_URLS='http://*:$PORT' dotnet WebAPI.dll
+CMD ASPNETCORE_URLS=http://*:$PORT dotnet WebAPI.dll
