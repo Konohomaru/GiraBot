@@ -2,7 +2,7 @@
   "profiles": {
     "ViaApp": {
       "commandName": "Project",
-      "commandLineArgs": "girabot.2021-02-05.private-key.pem 14400704"
+      "commandLineArgs": "girabot.pem 14400704"
     }
   }
 }

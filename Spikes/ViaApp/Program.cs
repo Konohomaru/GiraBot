@@ -32,20 +32,21 @@ namespace ViaApp
 				Credentials = new Credentials((await client.GitHubApps.CreateInstallationToken(installationId)).Token)
 			};
 
-			var repo = (await installationClient.GitHubApps.Installation.GetAllRepositoriesForCurrent()).Repositories.Single();
+			//var repo = (await installationClient.GitHubApps.Installation.GetAllRepositoriesForCurrent()).Repositories.Single();
+			var project = await installationClient.Repository.Project.GetAllForOrganization("Microsoft");
 
-			var repoIssues = await installationClient.Issue.GetAllForRepository(
-				repo.Id, 
-				new RepositoryIssueRequest { State = ItemStateFilter.All });
+			//var repoIssues = await installationClient.Issue.GetAllForRepository(
+			//	repo.Id, 
+			//	new RepositoryIssueRequest { State = ItemStateFilter.All });
 
 			WriteLine("Processed issues:");
-			foreach (var issue in repoIssues)
-				WriteLine($"\t{issue.Number}. {issue.Title} (state: {issue.State}).");
+			//foreach (var issue in repoIssues)
+			//	WriteLine($"\t{issue.Number}. {issue.Title} (state: {issue.State}).");
 
 			// Считаем число закрытых issues, которые будут закрытыми задачами.
-			var closedIssuesCount = repoIssues.Count(issue => issue.State == ItemState.Closed);
+			//var closedIssuesCount = repoIssues.Count(issue => issue.State == ItemState.Closed);
 
-			WriteLine($"Sprint Burndown is {closedIssuesCount}/{repoIssues.Count}.");
+			//WriteLine($"Sprint Burndown is {closedIssuesCount}/{repoIssues.Count}.");
 
 			// Чтобы консольное окно не закрывалось сразу после вывода.
 			ReadKey();
