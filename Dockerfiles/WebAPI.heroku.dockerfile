@@ -16,8 +16,8 @@ RUN dotnet publish -o publish/ -c Release --no-build --nologo src/WebAPI/
 # Use single ASP.NET Core runtime to reduce image size.
 FROM mcr.microsoft.com/dotnet/aspnet:5.0
 WORKDIR /app
-COPY --from=sdk app/publish/ publish/
+COPY --from=sdk app/publish/ .
 
 # Run WebAPI.
 # Using CMD instead of ENTRYPOINT and such ASPNETCORE_URLS requested from Heroku Dyno.
-CMD ASPNETCORE_URLS=http://*:$PORT dotnet publish/WebAPI.dll
+CMD ASPNETCORE_URLS='http://*:$PORT' dotnet WebAPI.dll
