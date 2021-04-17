@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModelTests", "ModelTests\Mo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAPI", "WebAPI\WebAPI.csproj", "{303DD3FB-5F12-436C-825F-232D26A5D9BF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitHub", "GitHub\GitHub.csproj", "{48F4DBB5-ED76-411D-B0F1-E74790B99847}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitHub", "GitHub\GitHub.csproj", "{48F4DBB5-ED76-411D-B0F1-E74790B99847}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

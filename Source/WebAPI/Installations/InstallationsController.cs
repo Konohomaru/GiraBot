@@ -1,7 +1,6 @@
 ﻿using GitHub;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Model;
 using System.Linq;
 
 namespace WebAPI
@@ -11,11 +10,17 @@ namespace WebAPI
 	[Route("[controller]")]
 	public class InstallationsController : ControllerBase
 	{
+		private GitHubBridge GitHub { get; }
+
+		public InstallationsController(GitHubBridge gitHub)
+		{
+			GitHub = gitHub;
+		}
+
 		[HttpGet]
 		public InstallationDto[] Get()
 		{
-			return AppHost.Instance
-				.Get<GitHubBridge>()
+			return GitHub
 				.GetInstallations()
 				.Select(installation => InstallationDto.BuildFrom(installation))
 				.ToArray();

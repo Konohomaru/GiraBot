@@ -10,11 +10,23 @@ namespace WebAPI
 	[Route("[controller]")]
 	public class SprintsController : ControllerBase
 	{
+		private SprintsDataSource Sprints { get; }
+
+		private Burndown Burndown { get; }
+
+		private Velocity Velocity { get; }
+
+		public SprintsController(SprintsDataSource sprints, Burndown burndown, Velocity velocity)
+		{
+			Sprints = sprints;
+			Burndown = burndown;
+			Velocity = velocity;
+		}
+
 		[HttpGet]
 		public SprintDto[] Get(long installationId, long repoId)
 		{
-			return AppHost.Instance
-				.Get<SprintsDataSource>()
+			return Sprints
 				.GetRepoSprints(installationId, repoId)
 				.Select(sprint => SprintDto.BuildFrom(sprint))
 				.ToArray();
@@ -24,9 +36,7 @@ namespace WebAPI
 		[Route("latest")]
 		public SprintDto GetLatest(long installationId, long repoId)
 		{
-			var sprint = AppHost.Instance
-				.Get<SprintsDataSource>()
-				.GetRepoLatestSprint(installationId, repoId);
+			var sprint = Sprints.GetRepoLatestSprint(installationId, repoId);
 
 			return SprintDto.BuildFrom(sprint);
 		}
@@ -35,8 +45,7 @@ namespace WebAPI
 		[Route("burndown")]
 		public BurndownNodeDto[] GetBurndown(long installationId, long repoId)
 		{
-			return AppHost.Instance
-				.Get<Burndown>()
+			return Burndown
 				.GetMetric(installationId, repoId)
 				.Select(node => BurndownNodeDto.BuildFrom(node))
 				.ToArray();
@@ -46,8 +55,7 @@ namespace WebAPI
 		[Route("velocity")]
 		public VelocityNodeDto[] GetVelocity(long installationId, long repoId, int sprintId)
 		{
-			return AppHost.Instance
-				.Get<Velocity>()
+			return Velocity
 				.GetMetric(installationId, repoId, sprintId)
 				.Select(node => VelocityNodeDto.BuildFrom(node))
 				.ToArray();

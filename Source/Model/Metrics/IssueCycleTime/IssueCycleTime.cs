@@ -6,11 +6,16 @@ namespace Model
 {
 	public class IssueCycleTime
 	{
+		private ReposDataSource Repos { get; }
+
+		public IssueCycleTime(ReposDataSource repos)
+		{
+			Repos = repos;
+		}
+
 		public IReadOnlyCollection<IssueCycleTimeNode> GetMetric(long installationId, long repoId)
 		{
-			var repoIssues = AppHost.Instance
-				.Get<ReposDataSource>()
-				.GetRepoIssues(installationId, repoId);
+			var repoIssues = Repos.GetRepoIssues(installationId, repoId);
 
 			return GetMetricNodes(repoIssues).ToArray();
 		}

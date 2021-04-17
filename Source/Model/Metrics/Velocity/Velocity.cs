@@ -8,19 +8,26 @@ namespace Model
 {
 	public class Velocity
 	{
+		private ICalendar Calendar { get; }
+
+		private ReposDataSource Repos { get; }
+
+		private SprintsDataSource Sprints { get; }
+
+		public Velocity(ICalendar calendar, ReposDataSource repos, SprintsDataSource sprints)
+		{
+			Calendar = calendar;
+			Repos = repos;
+			Sprints = sprints;
+		}
+
 		public IReadOnlyCollection<VelocityNode> GetMetric(long installationId, long repoId, int sprintId)
 		{
-			var repoSettings = AppHost.Instance
-				.Get<ReposDataSource>()
-				.GetRepoSettings(installationId, repoId);
+			var repoSettings = Repos.GetRepoSettings(installationId, repoId);
 
-			var sprint = AppHost.Instance
-				.Get<SprintsDataSource>()
-				.GetRepoSprint(installationId, repoId, sprintId);
+			var sprint = Sprints.GetRepoSprint(installationId, repoId, sprintId);
 
-			var sprintIssues = AppHost.Instance
-				.Get<SprintsDataSource>()
-				.GetSprintIssues(installationId, repoId, sprintId);
+			var sprintIssues = Sprints.GetSprintIssues(installationId, repoId, sprintId);
 
 			return GetMtricNodes(repoSettings, sprint, sprintIssues).ToArray();
 		}
@@ -30,7 +37,7 @@ namespace Model
 			Sprint sprint,
 			IReadOnlyCollection<Issue> sprintIssues)
 		{
-			var today = AppHost.Instance.GetTodayUtc();
+			var today = Calendar.GetCurrentUtcDateTime();
 			var currentDay = sprint.BeginAt;
 
 			while (sprint.ContainesDate(currentDay) && currentDay <= today) {

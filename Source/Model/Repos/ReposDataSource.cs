@@ -7,11 +7,19 @@ namespace Model
 {
 	public class ReposDataSource
 	{
+		private GitHubBridge GitHub { get; }
+
+		private ProjectComparerByName Comparer { get; }
+
+		public ReposDataSource(GitHubBridge gitHub, ProjectComparerByName comparer)
+		{
+			GitHub = gitHub;
+			Comparer = comparer;
+		}
+
 		public RepoSettings GetRepoSettings(long installationId, long repoId)
 		{
-			var repo = AppHost.Instance
-				.Get<GitHubBridge>()
-				.GetRepository(installationId, repoId);
+			var repo = GitHub.GetRepository(installationId, repoId);
 
 			// todo: Здесь должны считываться настройки репозитория из БД.
 			return new RepoSettings(
@@ -28,18 +36,14 @@ namespace Model
 
 		public IReadOnlyCollection<Issue> GetRepoIssues(long installationId, long repoId)
 		{
-			var repoSettings = AppHost.Instance
-				.Get<ReposDataSource>()
-				.GetRepoSettings(installationId, repoId);
+			var repoSettings = GetRepoSettings(installationId, repoId);
 
-			var issues = AppHost.Instance
-				.Get<GitHubBridge>()
-				.GetRepositoryIssues(installationId, repoId);
+			var issues = GitHub.GetRepositoryIssues(installationId, repoId);
 
 			return issues
 				.Where(issue => issue.Projects.ContainsAny(
 					repoSettings.AllowedProjects,
-					AppHost.Instance.Get<ProjectComparerByName>()))
+					Comparer))
 				.ToArray();
 		}
 	}
