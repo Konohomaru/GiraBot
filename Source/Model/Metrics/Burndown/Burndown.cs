@@ -2,28 +2,32 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using static GitHub.IssueState;
-
 namespace Model
 {
 	public class Burndown
 	{
+		private ICalendar Calendar { get; }
+
+		private SprintsDataSource Sprints { get; }
+
+		public Burndown(ICalendar calendar, SprintsDataSource sprints)
+		{
+			Calendar = calendar;
+			Sprints = sprints;
+		}
+
 		public IReadOnlyCollection<BurndownNode> GetMetric(long installationId, long repoId)
 		{
-			var sprint = AppHost.Instance
-				.Get<SprintsDataSource>()
-				.GetRepoLatestSprint(installationId, repoId);
+			var sprint = Sprints.GetRepoLatestSprint(installationId, repoId);
 
-			var sprintIssues = AppHost.Instance
-				.Get<SprintsDataSource>()
-				.GetSprintIssues(installationId, repoId, sprint.Id);
+			var sprintIssues = Sprints.GetSprintIssues(installationId, repoId, sprint.Id);
 
 			return GetMetricNodes(sprint, sprintIssues).ToArray();
 		}
 
 		private IEnumerable<BurndownNode> GetMetricNodes(Sprint sprint, IReadOnlyCollection<Issue> sprintIssues)
 		{
-			var today = AppHost.Instance.GetTodayUtc();
+			var today = Calendar.GetCurrentUtcDateTime();
 			var currentDay = sprint.BeginAt;
 
 			while (sprint.ContainesDate(currentDay) && currentDay <= today) {

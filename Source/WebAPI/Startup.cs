@@ -10,19 +10,20 @@ namespace WebAPI
 {
 	public class Startup
 	{
-		public IConfiguration Configuration { get; }
+		private IConfiguration Configuration { get; }
 
 		public Startup(IConfiguration configuration)
 		{
 			Configuration = configuration;
-			AppHost.Instance.Pem = configuration["Pem"];
 		}
 
 		public void ConfigureServices(IServiceCollection services)
 		{
 			services.AddControllers();
 			services.AddHealthChecks();
-			services.AddAuthentication("BasicAuthentication")
+			services.AddGiraModel(Configuration["Pem"]);
+			services
+				.AddAuthentication("BasicAuthentication")
 				.AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
 		}
 
@@ -32,11 +33,11 @@ namespace WebAPI
 				app.UseDeveloperExceptionPage();
 			}
 
-			app.UseHealthChecks(Configuration["HealthCheckPath"]);
 			app.UseRouting();
 			app.UseAuthentication();
 			app.UseAuthorization();
-			app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+			app.UseHealthChecks(Configuration["HealthCheckPath"]);
+			app.UseEndpoints(endpoints => endpoints.MapControllers());
 		}
 	}
 }

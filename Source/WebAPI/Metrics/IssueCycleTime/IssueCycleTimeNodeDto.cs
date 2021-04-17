@@ -22,7 +22,6 @@ namespace WebAPI
 				Title = node.Title,
 				CreatedAt = node.CreatedAt,
 				ClosedAt = node.ClosedAt,
-				Duration = node.Duration,
 				Labels = node.Labels
 			};
 		}

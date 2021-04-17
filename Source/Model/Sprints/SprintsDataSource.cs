@@ -6,14 +6,22 @@ namespace Model
 {
 	public class SprintsDataSource
 	{
+		private ICalendar Calendar { get; }
+
+		private ReposDataSource Repos { get; }
+
+		public SprintsDataSource(ICalendar calendar, ReposDataSource repos)
+		{
+			Calendar = calendar;
+			Repos = repos;
+		}
+
 		private IEnumerable<Sprint> BuildSprintsFor(long installationId, long repoId)
 		{
-			var repoSettings = AppHost.Instance
-				.Get<ReposDataSource>()
-				.GetRepoSettings(installationId, repoId);
+			var repoSettings = Repos.GetRepoSettings(installationId, repoId);
 
 			var calculatingDate = repoSettings.BeginAnalysisFrom;
-			var today = AppHost.Instance.GetTodayUtc();
+			var today = Calendar.GetCurrentUtcDateTime();
 
 			while (calculatingDate <= today) {
 				yield return new Sprint(
@@ -43,9 +51,7 @@ namespace Model
 
 		public IReadOnlyCollection<Issue> GetSprintIssues(long installationId, long repoId, int sprintId)
 		{
-			var repoIssues = AppHost.Instance
-				.Get<ReposDataSource>()
-				.GetRepoIssues(installationId, repoId);
+			var repoIssues = Repos.GetRepoIssues(installationId, repoId);
 
 			var sprint = GetRepoSprint(installationId, repoId, sprintId);
 
