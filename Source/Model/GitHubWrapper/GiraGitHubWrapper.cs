@@ -133,7 +133,7 @@ namespace Model
 			// Look for variables names in CompileIssuesQuery.
 			var queryVariables = new Dictionary<string, object> {
 				{ "name", repository.Name },
-				{ "login", repository.OwnerLogin }
+				{ "login", repository.Owner }
 			};
 
 			return GetConnection(installationId)
@@ -147,17 +147,17 @@ namespace Model
 						issueModel.Title,
 						issueModel.Labels.ToArray(),
 						issueModel.Projects
-							.Select(project => new Project( project.Id, project.Name))
+							.Select(project => new RepositoryProject( project.Id, project.Name))
 							.ToArray(),
 						issueModel.State))
 				.ToArray();
 		}
 
-		public IReadOnlyCollection<Project> GetRepositoryProjects(long installationId, long repositoryId)
+		public IReadOnlyCollection<RepositoryProject> GetRepositoryProjects(long installationId, long repositoryId)
 		{
 			return GetClient(installationId).Repository.Project
 				.GetAllForRepository(repositoryId).Result
-				.Select(project => new Project(project.Id, project.Name))
+				.Select(project => new RepositoryProject(project.Id, project.Name))
 				.ToArray();
 		}
 	}

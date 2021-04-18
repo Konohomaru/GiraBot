@@ -1,12 +1,12 @@
 ﻿namespace Model
 {
-	public class Project
+	public class RepositoryProject
 	{
 		public int Id { get; private set; }
 
 		public string Name { get; private set; }
 
-		public Project(int id, string name)
+		public RepositoryProject(int id, string name)
 		{
 			Id = id;
 			Name = name;

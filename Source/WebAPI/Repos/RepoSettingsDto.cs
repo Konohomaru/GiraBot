@@ -17,7 +17,7 @@ namespace WebAPI
 
 		public LaneDto[] Lanes { get; set; }
 
-		public ProjectDto[] AllowedProjects { get; set; }
+		public RepositoryProjectDto[] AllowedProjects { get; set; }
 
 		public static RepoSettingsDto BuildFrom(RepoSettings repoSettings)
 		{
@@ -29,7 +29,7 @@ namespace WebAPI
 					.Select(lane => LaneDto.BuildFrom(lane))
 					.ToArray(),
 				AllowedProjects = repoSettings.AllowedProjects
-					.Select(project => ProjectDto.BuildFrom(project))
+					.Select(project => RepositoryProjectDto.BuildFrom(project))
 					.ToArray()
 			};
 		}

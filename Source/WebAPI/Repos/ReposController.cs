@@ -43,11 +43,11 @@ namespace WebAPI
 
 		[HttpGet]
 		[Route("projects")]
-		public ProjectDto[] GetRepoProjects(long installationId, long repoId)
+		public RepositoryProjectDto[] GetRepoProjects(long installationId, long repoId)
 		{
 			return GitHub
 				.GetRepositoryProjects(installationId, repoId)
-				.Select(project => new ProjectDto { Id = project.Id, Name = project.Name })
+				.Select(project => new RepositoryProjectDto { Id = project.Id, Name = project.Name })
 				.ToArray();
 		}
 

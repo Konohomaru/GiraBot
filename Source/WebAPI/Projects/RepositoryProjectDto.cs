@@ -2,18 +2,18 @@
 
 namespace WebAPI
 {
-	public class ProjectDto
+	public class RepositoryProjectDto
 	{
 		public int Id { get; set; }
 
 		public string Name { get; set; }
 
-		public static ProjectDto BuildFrom(Project project)
+		public static RepositoryProjectDto BuildFrom(RepositoryProject project)
 		{
 			if (project is null)
 				return default;
 
-			return new ProjectDto {
+			return new RepositoryProjectDto {
 				Id = project.Id,
 				Name = project.Name
 			};

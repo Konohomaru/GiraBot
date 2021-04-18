@@ -17,7 +17,7 @@ namespace Model
 
 		public IReadOnlyCollection<string> Labels { get; private set; }
 
-		public IReadOnlyCollection<Project> Projects { get; private set; }
+		public IReadOnlyCollection<RepositoryProject> Projects { get; private set; }
 
 		public IssueState State { get; private set; }
 
@@ -28,7 +28,7 @@ namespace Model
 			DateTime? closedAt,
 			string title,
 			string[] labels,
-			Project[] projects,
+			RepositoryProject[] projects,
 			IssueState state)
 		{
 			Id = id;

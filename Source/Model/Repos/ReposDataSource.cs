@@ -8,12 +8,9 @@ namespace Model
 	{
 		private IGitHubWrapper GitHub { get; }
 
-		private ProjectComparerByName Comparer { get; }
-
-		public ReposDataSource(IGitHubWrapper gitHub, ProjectComparerByName comparer)
+		public ReposDataSource(IGitHubWrapper gitHub)
 		{
 			GitHub = gitHub;
-			Comparer = comparer;
 		}
 
 		public RepoSettings GetRepoSettings(long installationId, long repoId)
@@ -30,7 +27,7 @@ namespace Model
 					new Lane(1, "Tech Debts", "tech debt"),
 					new Lane(2, "Road Map", "road map")
 				},
-				new[] { new Project(1, "Caprica2.0") });
+				new[] { new RepositoryProject(1, "Caprica2.0") });
 		}
 
 		public IReadOnlyCollection<Issue> GetRepoIssues(long installationId, long repoId)
@@ -40,9 +37,7 @@ namespace Model
 			var issues = GitHub.GetRepositoryIssues(installationId, repoId);
 
 			return issues
-				.Where(issue => issue.Projects.ContainsAny(
-					repoSettings.AllowedProjects,
-					Comparer))
+				.Where(issue => issue.Projects.ContainsAny(repoSettings.AllowedProjects))
 				.ToArray();
 		}
 	}

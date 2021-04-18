@@ -10,16 +10,16 @@ namespace Model
 
 		public string FullName { get; private set; }
 
-		public string OwnerLogin { get; private set; }
+		public string Owner { get; private set; }
 
 		public DateTime CreatedAt { get; private set; }
 
-		public Repository(long id, string name,string fullName, string ownerLogin, DateTime createdAt)
+		public Repository(long id, string name,string fullName, string owner, DateTime createdAt)
 		{
 			Id = id;
 			Name = name;
 			FullName = fullName;
-			OwnerLogin = ownerLogin;
+			Owner = owner;
 			CreatedAt = createdAt;
 		}
 	}
