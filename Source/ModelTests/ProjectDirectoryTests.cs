@@ -16,8 +16,8 @@ namespace ModelTests
 
 		public ProjectDirectoryTests()
 		{
-			CalendarMock = new Mock<ICalendar>();
-			FacadeMock = new Mock<IGitHubFacade>();
+			CalendarMock = new();
+			FacadeMock = new();
 			Directory = new(CalendarMock.Object, FacadeMock.Object);
 		}
 
@@ -49,7 +49,7 @@ namespace ModelTests
 		{
 			CalendarMock
 				.Setup(calendar => calendar.GetCurrentUtcDateTime())
-				.Returns(new DateTime(2020, 01, 09));
+				.Returns(new DateTime(2021, 01, 09));
 
 			FacadeMock
 				.Setup(facade => facade.GetRepository(It.IsAny<long>(), It.IsAny<long>()))
@@ -58,17 +58,17 @@ namespace ModelTests
 					name: "whipping-boy",
 					fullName: "user/whipping-boy",
 					owner: "user",
-					createdAt: new DateTime(2020, 01, 01)));
+					createdAt: new DateTime(2021, 01, 01)));
 
 			var actualSprints = Directory.GetProjectSprints(0);
 
 			Assert.Equal(2, actualSprints.Count());
-			Assert.Equal(new DateTime(2020, 01, 01), actualSprints.ElementAt(0).BeginsAt);
-			Assert.Equal(new DateTime(2020, 01, 08), actualSprints.ElementAt(1).BeginsAt);
+			Assert.Equal(new DateTime(2021, 01, 01), actualSprints.ElementAt(0).BeginsAt);
+			Assert.Equal(new DateTime(2021, 01, 08), actualSprints.ElementAt(1).BeginsAt);
 		}
 
 		[Fact]
-		public void GetProjectSprints_35DaysAheadOfSprintBegining_7Sprint()
+		public void GetProjectSprints_35DaysAheadOfSprintBegining_7Sprints()
 		{
 			CalendarMock
 				.Setup(calendar => calendar.GetCurrentUtcDateTime())

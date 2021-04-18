@@ -19,7 +19,7 @@ namespace Model
 			DaysCount = duration;
 		}
 
-		public bool ContainesDate(DateTime date)
+		public bool ContainsDate(DateTime date)
 		{
 			return date >= BeginsAt && date < EndsAt;
 		}

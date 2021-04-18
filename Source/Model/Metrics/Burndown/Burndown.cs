@@ -7,9 +7,9 @@ namespace Model
 	{
 		private ICalendar Calendar { get; }
 
-		private ProjectsDirectory Directory { get; }
+		private IProjectsDirectory Directory { get; }
 
-		public Burndown(ICalendar calendar, ProjectsDirectory directory)
+		public Burndown(ICalendar calendar, IProjectsDirectory directory)
 		{
 			Calendar = calendar;
 			Directory = directory;
@@ -34,10 +34,12 @@ namespace Model
 			var today = Calendar.GetCurrentUtcDateTime();
 			var currentDay = sprint.BeginsAt;
 
-			while (sprint.ContainesDate(currentDay) && currentDay <= today) {
+			while (sprint.ContainsDate(currentDay) && currentDay <= today) {
 				yield return new BurndownNode(
 					currentDay,
-					sprintTasks.Count(issue => issue.ClosedAt is null || issue.ClosedAt <= currentDay));
+					sprintTasks.Count(issue =>
+						issue.CreatedAt <= currentDay &&
+						(!issue.ClosedAt.HasValue || issue.ClosedAt > currentDay)));
 				currentDay = currentDay.AddDays(1);
 			}
 		}

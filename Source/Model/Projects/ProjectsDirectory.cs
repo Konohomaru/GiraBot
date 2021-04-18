@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Model
 {
-	public class ProjectsDirectory
+	public class ProjectsDirectory : IProjectsDirectory
 	{
 		private ICalendar Calendar { get; }
 

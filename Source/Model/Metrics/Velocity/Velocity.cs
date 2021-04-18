@@ -39,7 +39,7 @@ namespace Model
 			var today = Calendar.GetCurrentUtcDateTime();
 			var currentDay = sprint.BeginsAt;
 
-			while (sprint.ContainesDate(currentDay) && currentDay <= today) {
+			while (sprint.ContainsDate(currentDay) && currentDay <= today) {
 				yield return new VelocityNode(
 					currentDay,
 					lanes.ToDictionary(

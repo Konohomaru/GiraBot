@@ -12,8 +12,8 @@ namespace WebAPI
 		public static BurndownNodeDto BuildFrom(BurndownNode node)
 		{
 			return new BurndownNodeDto {
-				SprintDay = node.SprintDay,
-				RemainingIssues = node.RemainingIssues
+				SprintDay = node.Day,
+				RemainingIssues = node.RemainingTasks
 			};
 		}
 	}
