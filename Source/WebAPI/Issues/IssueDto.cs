@@ -1,6 +1,4 @@
-﻿using GitHub;
-using System;
-using System.Linq;
+﻿using System;
 
 namespace WebAPI
 {
@@ -17,17 +15,5 @@ namespace WebAPI
 		public string[] Labels { get; set; }
 
 		public string State { get; set; }
-
-		public static IssueDto BuildFrom(Issue issue)
-		{
-			return new IssueDto {
-				Id = issue.Id,
-				UpdateAt = issue.UpdateAt,
-				ClosedAt = issue.ClosedAt,
-				Title = issue.Title,
-				Labels = issue.Labels.ToArray(),
-				State = issue.State.ToString()
-			};
-		}
 	}
 }

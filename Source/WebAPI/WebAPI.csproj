@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GitHub\GitHub.csproj" />
     <ProjectReference Include="..\Model\Model.csproj" />
   </ItemGroup>
 

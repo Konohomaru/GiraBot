@@ -1,6 +1,6 @@
-﻿using GitHub;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Model;
 using System.Linq;
 
 namespace WebAPI
@@ -10,9 +10,9 @@ namespace WebAPI
 	[Route("[controller]")]
 	public class InstallationsController : ControllerBase
 	{
-		private GitHubBridge GitHub { get; }
+		private IGitHubWrapper GitHub { get; }
 
-		public InstallationsController(GitHubBridge gitHub)
+		public InstallationsController(IGitHubWrapper gitHub)
 		{
 			GitHub = gitHub;
 		}

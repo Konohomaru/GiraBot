@@ -1,4 +1,4 @@
-﻿using GitHub;
+﻿using Model;
 
 namespace WebAPI
 {
@@ -6,13 +6,13 @@ namespace WebAPI
 	{
 		public long Id { get; set; }
 
-		public string Owner { get; set; }
+		public string OwnerLogin { get; set; }
 
 		public static InstallationDto BuildFrom(Installation installation)
 		{
 			return new InstallationDto {
 				Id = installation.Id,
-				Owner = installation.Owner.Login
+				OwnerLogin = installation.OwnerLogin
 			};
 		}
 	}

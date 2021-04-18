@@ -1,5 +1,4 @@
-﻿using GitHub;
-using System;
+﻿using System;
 
 namespace Model
 {

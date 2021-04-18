@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace GitHub
+namespace Model
 {
 	internal class IssueModel
 	{

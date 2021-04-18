@@ -1,5 +1,4 @@
-﻿using GitHub;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 
 namespace Model
 {
@@ -7,7 +6,7 @@ namespace Model
 	{
 		public static void AddGiraModel(this IServiceCollection services, string gitHubPem)
 		{
-			services.AddTransient(_ => new GitHubBridge(gitHubPem));
+			services.AddTransient<IGitHubWrapper, GiraGitHubWrapper>(_ => new GiraGitHubWrapper(gitHubPem));
 			services.AddSingleton<ICalendar, GiraCalendar>();
 			services.AddSingleton<ProjectComparerByName>();
 			services.AddSingleton<Burndown>();

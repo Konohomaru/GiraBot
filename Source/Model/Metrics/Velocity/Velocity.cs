@@ -1,8 +1,5 @@
-﻿using GitHub;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-
-using static GitHub.IssueState;
 
 namespace Model
 {
@@ -46,7 +43,7 @@ namespace Model
 					repoSettings.Lanes.ToDictionary(
 						keySelector: lane => lane,
 						elementSelector: lane => sprintIssues
-							.Where(issue => issue.State == Closed)
+							.Where(issue => issue.State == IssueState.Closed)
 							.Count(issue => issue.Labels.Contains(lane.MappedLabelName))));
 				currentDay = currentDay.AddDays(1);
 			}

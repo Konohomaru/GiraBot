@@ -1,5 +1,4 @@
-﻿using GitHub;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace Model
@@ -17,7 +16,8 @@ namespace Model
 		{
 			var repoIssues = Repos.GetRepoIssues(installationId, repoId);
 
-			return GetMetricNodes(repoIssues).ToArray();
+			return GetMetricNodes(repoIssues)
+				.ToArray();
 		}
 
 		private IEnumerable<IssueCycleTimeNode> GetMetricNodes(IReadOnlyCollection<Issue> repoIssues)
