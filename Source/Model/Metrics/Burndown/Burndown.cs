@@ -18,11 +18,11 @@ namespace Model
 		public IReadOnlyCollection<BurndownNode> GetMetric(int projectId)
 		{
 			var sprint = Directory
-				.GetGiraProjectSprints(projectId)
+				.GetProjectSprints(projectId)
 				.Last();
 
 			var sprintTasks = Directory
-				.GetGiraProjectTasks(projectId)
+				.GetProjectTasks(projectId)
 				.GetSprintTasks(sprint)
 				.ToArray();
 
@@ -32,7 +32,7 @@ namespace Model
 		private IEnumerable<BurndownNode> GetMetricNodes(Sprint sprint, IReadOnlyCollection<GiraTask> sprintTasks)
 		{
 			var today = Calendar.GetCurrentUtcDateTime();
-			var currentDay = sprint.BeginAt;
+			var currentDay = sprint.BeginsAt;
 
 			while (sprint.ContainesDate(currentDay) && currentDay <= today) {
 				yield return new BurndownNode(

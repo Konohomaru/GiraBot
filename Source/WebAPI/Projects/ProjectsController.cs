@@ -21,7 +21,7 @@ namespace WebAPI
 		[Route("{projectId}")]
 		public ProjectDto GetGiraProject(int projectId)
 		{
-			var giraProject = Directory.GetGiraProject(projectId);
+			var giraProject = Directory.GetProject(projectId);
 
 			return new ProjectDto {
 				Id = giraProject.Id,
@@ -51,7 +51,7 @@ namespace WebAPI
 		public GiraTaskDto[] GetGiraProjectTasks(int projectId)
 		{
 			return Directory
-				.GetGiraProjectTasks(projectId)
+				.GetProjectTasks(projectId)
 				.Select(giraTask => new GiraTaskDto {
 					Id = giraTask.Id,
 					ClosedAt = giraTask.ClosedAt,
@@ -67,11 +67,11 @@ namespace WebAPI
 		public SprintDto[] GetProjectSprints(int projectId)
 		{
 			return Directory
-				.GetGiraProjectSprints(projectId)
+				.GetProjectSprints(projectId)
 				.Select(sprint => new SprintDto {
 					Id = sprint.Id,
-					BeginAt = sprint.BeginAt,
-					Duration = sprint.Duration
+					BeginAt = sprint.BeginsAt,
+					Duration = sprint.DaysCount
 				})
 				.ToArray();
 		}

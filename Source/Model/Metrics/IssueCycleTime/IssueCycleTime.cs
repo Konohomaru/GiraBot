@@ -15,7 +15,7 @@ namespace Model
 		public IReadOnlyCollection<IssueCycleTimeNode> GetMetric(int projectId)
 		{
 			return Directory
-				.GetGiraProjectTasks(projectId)
+				.GetProjectTasks(projectId)
 				.Select(task => new IssueCycleTimeNode(
 					task.Title,
 					task.CreatedAt,

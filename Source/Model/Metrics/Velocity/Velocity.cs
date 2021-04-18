@@ -17,14 +17,14 @@ namespace Model
 
 		public IReadOnlyCollection<VelocityNode> GetMetric(int projectId)
 		{
-			var lanes = Directory.GetGiraProject(projectId).GitHubSettings.Lanes;
+			var lanes = Directory.GetProject(projectId).GitHubSettings.Lanes;
 
 			var sprint = Directory
-				.GetGiraProjectSprints(projectId)
+				.GetProjectSprints(projectId)
 				.Last();
 
 			var sprintTasks = Directory
-				.GetGiraProjectTasks(projectId)
+				.GetProjectTasks(projectId)
 				.GetSprintTasks(sprint)
 				.ToArray();
 
@@ -37,7 +37,7 @@ namespace Model
 			IReadOnlyCollection<GiraTask> sprintTasks)
 		{
 			var today = Calendar.GetCurrentUtcDateTime();
-			var currentDay = sprint.BeginAt;
+			var currentDay = sprint.BeginsAt;
 
 			while (sprint.ContainesDate(currentDay) && currentDay <= today) {
 				yield return new VelocityNode(

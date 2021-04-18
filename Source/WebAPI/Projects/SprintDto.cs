@@ -21,8 +21,8 @@ namespace WebAPI
 
 			return new SprintDto {
 				Id = sprint.Id,
-				BeginAt = sprint.BeginAt,
-				Duration = sprint.Duration
+				BeginAt = sprint.BeginsAt,
+				Duration = sprint.DaysCount
 			};
 		}
 	}

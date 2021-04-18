@@ -9,13 +9,13 @@ namespace Model
 
 		private IGitHubFacade GitHubClient { get; }
 
-		public ProjectsDirectory(ICalendar calendar, IGitHubFacade gitHubWrapper)
+		public ProjectsDirectory(ICalendar calendar, IGitHubFacade facade)
 		{
 			Calendar = calendar;
-			GitHubClient = gitHubWrapper;
+			GitHubClient = facade;
 		}
 
-		public GitHubSettings GetGitHubSettings(int projectId)
+		public GitHubSettings GetProjectGitHubSettings(int projectId)
 		{
 			return new GitHubSettings(
 				installationId: 15161810,
@@ -28,9 +28,9 @@ namespace Model
 				allowedProjects: new[] { new RepositoryProject(3720514, "Caprica2.0") });
 		}
 
-		public Project GetGiraProject(int projectId)
+		public Project GetProject(int projectId)
 		{
-			var gitHubSettings = GetGitHubSettings(projectId);
+			var gitHubSettings = GetProjectGitHubSettings(projectId);
 
 			var gitHubRepository = GitHubClient.GetRepository(
 				installationId: gitHubSettings.InstallationId,
@@ -43,9 +43,9 @@ namespace Model
 				gitHubSettings: gitHubSettings);
 		}
 
-		public IEnumerable<Sprint> GetGiraProjectSprints(int projectId)
+		public IEnumerable<Sprint> GetProjectSprints(int projectId)
 		{
-			var giraProject = GetGiraProject(projectId);
+			var giraProject = GetProject(projectId);
 			var currentSpritnStartDay = giraProject.StartSprintsAt;
 			var today = Calendar.GetCurrentUtcDateTime();
 
@@ -59,9 +59,9 @@ namespace Model
 			}
 		}
 
-		public IReadOnlyCollection<GiraTask> GetGiraProjectTasks(int projectId)
+		public IReadOnlyCollection<GiraTask> GetProjectTasks(int projectId)
 		{
-			var gitHubSettings = GetGitHubSettings(projectId);
+			var gitHubSettings = GetProjectGitHubSettings(projectId);
 
 			return GitHubClient
 				.GetRepositoryIssues(
