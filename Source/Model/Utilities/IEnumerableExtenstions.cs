@@ -24,7 +24,7 @@ namespace Model
 		public static IEnumerable<GiraTask> GetSprintTasks(this IEnumerable<GiraTask> tasks, Sprint sprint)
 		{
 			return tasks
-				.Where(task => !task.ClosedAt.HasValue || task.ClosedAt > sprint.BeginsAt)
+				.Where(task => !task.ClosedAt.HasValue || task.ClosedAt >= sprint.BeginsAt)
 				.ToArray();
 		}
 	}

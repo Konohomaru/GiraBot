@@ -5,14 +5,14 @@ namespace Model
 {
 	public class VelocityNode
 	{
-		public DateTime SprintDay { get; private set; }
+		public DateTime Day { get; private set; }
 
-		public IDictionary<Lane, int> IssuesByLane { get; private set; }
+		public IDictionary<Lane, int> CompletedTasksByLane { get; private set; }
 
-		public VelocityNode(DateTime sprintDay, IDictionary<Lane, int> issuesByLane)
+		public VelocityNode(DateTime day, IDictionary<Lane, int> completedTasksByLane)
 		{
-			SprintDay = sprintDay;
-			IssuesByLane = issuesByLane;
+			Day = day;
+			CompletedTasksByLane = completedTasksByLane;
 		}
 	}
 }

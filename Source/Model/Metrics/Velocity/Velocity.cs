@@ -45,7 +45,7 @@ namespace Model
 					lanes.ToDictionary(
 						keySelector: lane => lane,
 						elementSelector: lane => sprintTasks
-							.Where(task => task.ClosedAt.HasValue)
+							.Where(task => task.ClosedAt <= currentDay)
 							.Count(task => task.Labels.Contains(lane.MappedName))));
 				currentDay = currentDay.AddDays(1);
 			}

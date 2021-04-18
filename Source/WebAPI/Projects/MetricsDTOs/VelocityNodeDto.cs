@@ -13,8 +13,8 @@ namespace WebAPI
 		public static VelocityNodeDto BuildFrom(VelocityNode node)
 		{
 			return new VelocityNodeDto {
-				SprintDay = node.SprintDay,
-				IssuesByLane = node.IssuesByLane
+				SprintDay = node.Day,
+				IssuesByLane = node.CompletedTasksByLane
 					.Select(item => VelocityLaneDto.BuildFrom(LaneDto.BuildFrom(item.Key), item.Value))
 					.ToArray()
 			};
