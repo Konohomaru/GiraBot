@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
@@ -6,10 +6,9 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\GitHub\GitHub.csproj" />
+    <PackageReference Include="GitHubJwt" Version="0.0.4" />
+    <PackageReference Include="Octokit" Version="0.50.0" />
+    <PackageReference Include="Octokit.GraphQL" Version="0.1.7-beta" />
   </ItemGroup>
 
 </Project>

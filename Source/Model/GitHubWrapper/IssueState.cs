@@ -1,7 +1,7 @@
 ﻿using System;
 using GraphQL = Octokit.GraphQL.Model;
 
-namespace GitHub
+namespace Model
 {
 	public enum IssueState
 	{
@@ -9,7 +9,7 @@ namespace GitHub
 		Open
 	}
 
-	internal class IssueStateConverter
+	public class IssueStateConverter
 	{
 		public static IssueState BuildFrom(GraphQL.IssueState state)
 		{

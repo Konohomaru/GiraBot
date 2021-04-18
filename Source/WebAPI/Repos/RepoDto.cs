@@ -1,4 +1,4 @@
-﻿using GitHub;
+﻿using Model;
 using System;
 
 namespace WebAPI

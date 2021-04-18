@@ -1,5 +1,4 @@
-﻿using GitHub;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,11 +6,11 @@ namespace Model
 {
 	public class ReposDataSource
 	{
-		private GitHubBridge GitHub { get; }
+		private IGitHubWrapper GitHub { get; }
 
 		private ProjectComparerByName Comparer { get; }
 
-		public ReposDataSource(GitHubBridge gitHub, ProjectComparerByName comparer)
+		public ReposDataSource(IGitHubWrapper gitHub, ProjectComparerByName comparer)
 		{
 			GitHub = gitHub;
 			Comparer = comparer;

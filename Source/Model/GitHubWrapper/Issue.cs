@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
-namespace GitHub
+namespace Model
 {
 	public class Issue
 	{
@@ -40,21 +39,6 @@ namespace GitHub
 			Labels = labels;
 			Projects = projects;
 			State = state;
-		}
-
-		internal static Issue BuildFrom(IssueModel issue)
-		{
-			return new Issue(
-				issue.Id,
-				issue.CreateAt.UtcDateTime,
-				issue.UpdateAt.UtcDateTime,
-				issue.ClsoedAt?.UtcDateTime,
-				issue.Title,
-				issue.Labels.ToArray(),
-				issue.Projects
-					.Select(project => Project.BuildFrom(project))
-					.ToArray(),
-				issue.State);
 		}
 	}
 }

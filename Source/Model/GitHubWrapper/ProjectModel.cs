@@ -1,4 +1,4 @@
-﻿namespace GitHub
+﻿namespace Model
 {
 	internal class ProjectModel
 	{

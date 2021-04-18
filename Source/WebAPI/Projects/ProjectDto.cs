@@ -1,4 +1,4 @@
-﻿using GitHub;
+﻿using Model;
 
 namespace WebAPI
 {

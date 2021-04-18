@@ -1,5 +1,4 @@
-﻿using GitHub;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Model;
 using System.Linq;
@@ -11,13 +10,13 @@ namespace WebAPI
 	[Route("[controller]")]
 	public class ReposController : ControllerBase
 	{
-		private GitHubBridge GitHub { get; }
+		private IGitHubWrapper GitHub { get; }
 
 		private ReposDataSource Repos { get; }
 
 		private IssueCycleTime IssueCycleTime { get; }
 
-		public ReposController(GitHubBridge gitHub, ReposDataSource repos, IssueCycleTime issueCycleTime)
+		public ReposController(IGitHubWrapper gitHub, ReposDataSource repos, IssueCycleTime issueCycleTime)
 		{
 			GitHub = gitHub;
 			Repos = repos;
@@ -48,7 +47,7 @@ namespace WebAPI
 		{
 			return GitHub
 				.GetRepositoryProjects(installationId, repoId)
-				.Select(project => ProjectDto.BuildFrom(project))
+				.Select(project => new ProjectDto { Id = project.Id, Name = project.Name })
 				.ToArray();
 		}
 
@@ -58,7 +57,14 @@ namespace WebAPI
 		{
 			return Repos
 				.GetRepoIssues(installationId, repoId)
-				.Select(issue => IssueDto.BuildFrom(issue))
+				.Select(issue => new IssueDto {
+					Id = issue.Id,
+					UpdateAt = issue.UpdateAt,
+					ClosedAt = issue.ClosedAt,
+					Title = issue.Title,
+					Labels = issue.Labels.ToArray(),
+					State = issue.State.ToString()
+				})
 				.ToArray();
 		}
 
