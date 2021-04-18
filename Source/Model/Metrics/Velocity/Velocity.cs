@@ -7,9 +7,9 @@ namespace Model
 	{
 		private ICalendar Calendar { get; }
 
-		private ProjectsDirectory Directory { get; }
+		private IProjectsDirectory Directory { get; }
 
-		public Velocity(ICalendar calendar, ProjectsDirectory directory)
+		public Velocity(ICalendar calendar, IProjectsDirectory directory)
 		{
 			Calendar = calendar;
 			Directory = directory;

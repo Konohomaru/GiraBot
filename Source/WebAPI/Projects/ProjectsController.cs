@@ -10,11 +10,14 @@ namespace WebAPI
 	[Route("[controller]")]
 	public class ProjectsController : Controller
 	{
-		private ProjectsDirectory Directory { get; }
+		private IProjectsDirectory Directory { get; }
 
-		public ProjectsController(ProjectsDirectory directory)
+		private Burndown Burndown { get; }
+
+		public ProjectsController(IProjectsDirectory directory, Burndown burndown)
 		{
 			Directory = directory;
+			Burndown = burndown;
 		}
 
 		[HttpGet]
@@ -72,6 +75,19 @@ namespace WebAPI
 					Id = sprint.Id,
 					BeginAt = sprint.BeginsAt,
 					Duration = sprint.DaysCount
+				})
+				.ToArray();
+		}
+
+		[HttpGet]
+		[Route("{projectId}/burndown")]
+		public BurndownNodeDto[] GetBurndownMetric(int projectId)
+		{
+			return Burndown
+				.GetMetric(projectId)
+				.Select(node => new BurndownNodeDto {
+					Day = node.Day,
+					RemainingTasks = node.RemainingTasks
 				})
 				.ToArray();
 		}
