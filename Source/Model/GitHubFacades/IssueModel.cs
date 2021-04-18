@@ -17,7 +17,7 @@ namespace Model
 
 		public List<string> Labels { get; set; }
 
-		public List<ProjectModel> Projects { get; set; }
+		public List<RepositoryProjectModel> Projects { get; set; }
 
 		public IssueState State { get; set; }
 	}
