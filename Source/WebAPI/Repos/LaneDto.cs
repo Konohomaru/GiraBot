@@ -12,7 +12,7 @@ namespace WebAPI
 		{
 			return new LaneDto {
 				Name = lane.Name,
-				MappedLabelName = lane.MappedLabelName
+				MappedLabelName = lane.MappedName
 			};
 		}
 	}

@@ -15,7 +15,7 @@ namespace Model
 
 		public IReadOnlyCollection<Lane> Lanes { get; private set; }
 
-		public IReadOnlyCollection<Project> AllowedProjects { get; private set; }
+		public IReadOnlyCollection<RepositoryProject> AllowedProjects { get; private set; }
 
 		/// <summary>
 		/// Represents Gira settings over GitHub repository.
@@ -26,7 +26,7 @@ namespace Model
 			DateTime beginAt,
 			int sprintDuration,
 			Lane[] lanes,
-			Project[] allowedProjects)
+			RepositoryProject[] allowedProjects)
 		{
 			Repo = repo;
 			BeginAnalysisFrom = beginAt;

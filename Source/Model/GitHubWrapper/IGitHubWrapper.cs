@@ -14,6 +14,6 @@ namespace Model
 
 		IReadOnlyCollection<Issue> GetRepositoryIssues(long installationId, long repositoryId);
 
-		IReadOnlyCollection<Project> GetRepositoryProjects(long installationId, long repositoryId);
+		IReadOnlyCollection<RepositoryProject> GetRepositoryProjects(long installationId, long repositoryId);
 	}
 }

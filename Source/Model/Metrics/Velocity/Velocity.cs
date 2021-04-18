@@ -44,7 +44,7 @@ namespace Model
 						keySelector: lane => lane,
 						elementSelector: lane => sprintIssues
 							.Where(issue => issue.State == IssueState.Closed)
-							.Count(issue => issue.Labels.Contains(lane.MappedLabelName))));
+							.Count(issue => issue.Labels.Contains(lane.MappedName))));
 				currentDay = currentDay.AddDays(1);
 			}
 		}
