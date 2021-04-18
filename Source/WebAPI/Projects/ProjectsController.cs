@@ -7,23 +7,23 @@ namespace WebAPI
 {
 	[Authorize]
 	[ApiController]
-	[Route("projects")]
-	public class GiraProjectsController : Controller
+	[Route("[controller]")]
+	public class ProjectsController : Controller
 	{
-		private GiraProjectsDirectory Directory { get; }
+		private ProjectsDirectory Directory { get; }
 
-		public GiraProjectsController(GiraProjectsDirectory directory)
+		public ProjectsController(ProjectsDirectory directory)
 		{
 			Directory = directory;
 		}
 
 		[HttpGet]
 		[Route("{projectId}")]
-		public GiraProjectDto GetGiraProject(int projectId)
+		public ProjectDto GetGiraProject(int projectId)
 		{
 			var giraProject = Directory.GetGiraProject(projectId);
 
-			return new GiraProjectDto {
+			return new ProjectDto {
 				Id = giraProject.Id,
 				Name = giraProject.Name,
 				InstallationId = giraProject.GitHubSettings.InstallationId,

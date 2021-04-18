@@ -1,6 +1,6 @@
 ﻿namespace WebAPI
 {
-	public class GiraProjectDto
+	public class ProjectDto
 	{
 		public int Id { get; set; }
 

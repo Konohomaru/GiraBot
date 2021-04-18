@@ -3,13 +3,13 @@ using System.Linq;
 
 namespace Model
 {
-	public class GiraProjectsDirectory
+	public class ProjectsDirectory
 	{
 		private ICalendar Calendar { get; }
 
 		private IGitHubFacade GitHubClient { get; }
 
-		public GiraProjectsDirectory(ICalendar calendar, IGitHubFacade gitHubWrapper)
+		public ProjectsDirectory(ICalendar calendar, IGitHubFacade gitHubWrapper)
 		{
 			Calendar = calendar;
 			GitHubClient = gitHubWrapper;
@@ -28,7 +28,7 @@ namespace Model
 				allowedProjects: new[] { new RepositoryProject(3720514, "Caprica2.0") });
 		}
 
-		public GiraProject GetGiraProject(int projectId)
+		public Project GetGiraProject(int projectId)
 		{
 			var gitHubSettings = GetGitHubSettings(projectId);
 
@@ -36,7 +36,7 @@ namespace Model
 				installationId: gitHubSettings.InstallationId,
 				repositoryId: gitHubSettings.RepositoryId);
 
-			return new GiraProject(
+			return new Project(
 				id: 0,
 				name: gitHubRepository.FullName,
 				startSprintsAt: gitHubRepository.CreatedAt,

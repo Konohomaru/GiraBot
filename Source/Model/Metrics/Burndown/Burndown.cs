@@ -7,9 +7,9 @@ namespace Model
 	{
 		private ICalendar Calendar { get; }
 
-		private GiraProjectsDirectory Directory { get; }
+		private ProjectsDirectory Directory { get; }
 
-		public Burndown(ICalendar calendar, GiraProjectsDirectory directory)
+		public Burndown(ICalendar calendar, ProjectsDirectory directory)
 		{
 			Calendar = calendar;
 			Directory = directory;

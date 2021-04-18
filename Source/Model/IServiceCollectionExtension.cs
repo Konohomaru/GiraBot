@@ -11,7 +11,7 @@ namespace Model
 			services.AddSingleton<Burndown>();
 			services.AddSingleton<Velocity>();
 			services.AddSingleton<IssueCycleTime>();
-			services.AddSingleton<GiraProjectsDirectory>();
+			services.AddSingleton<ProjectsDirectory>();
 		}
 	}
 }

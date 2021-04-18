@@ -5,9 +5,9 @@ namespace Model
 {
 	public class IssueCycleTime
 	{
-		private GiraProjectsDirectory Directory { get; }
+		private ProjectsDirectory Directory { get; }
 
-		public IssueCycleTime(GiraProjectsDirectory directory)
+		public IssueCycleTime(ProjectsDirectory directory)
 		{
 			Directory = directory;
 		}

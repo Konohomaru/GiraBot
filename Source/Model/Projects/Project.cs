@@ -2,7 +2,7 @@
 
 namespace Model
 {
-	public class GiraProject
+	public class Project
 	{
 		public int Id { get; private set; }
 
@@ -14,7 +14,7 @@ namespace Model
 
 		public GitHubSettings GitHubSettings { get; private set; }
 
-		public GiraProject(int id, string name, DateTime startSprintsAt, GitHubSettings gitHubSettings)
+		public Project(int id, string name, DateTime startSprintsAt, GitHubSettings gitHubSettings)
 		{
 			Id = id;
 			Name = name;
