@@ -14,10 +14,16 @@ namespace WebAPI
 
 		private Burndown Burndown { get; }
 
-		public ProjectsController(IProjectsDirectory directory, Burndown burndown)
+		private Velocity Velocity { get; }
+
+		public ProjectsController(
+			IProjectsDirectory directory,
+			Burndown burndown,
+			Velocity velocity)
 		{
 			Directory = directory;
 			Burndown = burndown;
+			Velocity = velocity;
 		}
 
 		[HttpGet]
@@ -89,6 +95,16 @@ namespace WebAPI
 					Day = node.Day,
 					RemainingTasks = node.RemainingTasks
 				})
+				.ToArray();
+		}
+
+		[HttpGet]
+		[Route("{projectId}/velocity")]
+		public VelocityNodeDto[] GetVelocityMetric(int projectId)
+		{
+			return Velocity
+				.GetMetric(projectId)
+				.Select(node => VelocityNodeDto.BuildFrom(node))
 				.ToArray();
 		}
 	}
