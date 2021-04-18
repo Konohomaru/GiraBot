@@ -7,32 +7,34 @@ namespace Model
 	{
 		private ICalendar Calendar { get; }
 
-		private ReposDataSource Repos { get; }
+		private GiraProjectsDirectory Directory { get; }
 
-		private SprintsDataSource Sprints { get; }
-
-		public Velocity(ICalendar calendar, ReposDataSource repos, SprintsDataSource sprints)
+		public Velocity(ICalendar calendar, GiraProjectsDirectory directory)
 		{
 			Calendar = calendar;
-			Repos = repos;
-			Sprints = sprints;
+			Directory = directory;
 		}
 
-		public IReadOnlyCollection<VelocityNode> GetMetric(long installationId, long repoId, int sprintId)
+		public IReadOnlyCollection<VelocityNode> GetMetric(int projectId)
 		{
-			var repoSettings = Repos.GetRepoSettings(installationId, repoId);
+			var lanes = Directory.GetGiraProject(projectId).GitHubSettings.Lanes;
 
-			var sprint = Sprints.GetRepoSprint(installationId, repoId, sprintId);
+			var sprint = Directory
+				.GetGiraProjectSprints(projectId)
+				.Last();
 
-			var sprintIssues = Sprints.GetSprintIssues(installationId, repoId, sprintId);
+			var sprintTasks = Directory
+				.GetGiraProjectTasks(projectId)
+				.GetSprintTasks(sprint)
+				.ToArray();
 
-			return GetMtricNodes(repoSettings, sprint, sprintIssues).ToArray();
+			return GetMtricNodes(sprint, lanes, sprintTasks).ToArray();
 		}
 
 		private IEnumerable<VelocityNode> GetMtricNodes(
-			RepoSettings repoSettings,
 			Sprint sprint,
-			IReadOnlyCollection<Issue> sprintIssues)
+			IReadOnlyCollection<Lane> lanes,
+			IReadOnlyCollection<GiraTask> sprintTasks)
 		{
 			var today = Calendar.GetCurrentUtcDateTime();
 			var currentDay = sprint.BeginAt;
@@ -40,11 +42,11 @@ namespace Model
 			while (sprint.ContainesDate(currentDay) && currentDay <= today) {
 				yield return new VelocityNode(
 					currentDay,
-					repoSettings.Lanes.ToDictionary(
+					lanes.ToDictionary(
 						keySelector: lane => lane,
-						elementSelector: lane => sprintIssues
-							.Where(issue => issue.State == IssueState.Closed)
-							.Count(issue => issue.Labels.Contains(lane.MappedName))));
+						elementSelector: lane => sprintTasks
+							.Where(task => task.ClosedAt.HasValue)
+							.Count(task => task.Labels.Contains(lane.MappedName))));
 				currentDay = currentDay.AddDays(1);
 			}
 		}

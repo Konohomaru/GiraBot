@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Model
 {
 	public static class IEnumerableExtenstions
 	{
-		/// <summary>
-		/// Determines whether a sequence contains any element of second.
-		/// </summary>
-		/// <returns>True if contains, else False.</returns>
-		public static bool ContainsAny(this IEnumerable<RepositoryProject> source, IEnumerable<RepositoryProject> collection)
+		public static bool ContainsAny(
+			this IEnumerable<RepositoryProject> source,
+			IEnumerable<RepositoryProject> collection)
 		{
 			if (source is null) throw new ArgumentNullException(nameof(source));
 			if (collection is null) throw new ArgumentNullException(nameof(source));
@@ -20,6 +19,13 @@ namespace Model
 						return true;
 
 			return false;
+		}
+
+		public static IEnumerable<GiraTask> GetSprintTasks(this IEnumerable<GiraTask> tasks, Sprint sprint)
+		{
+			return tasks
+				.Where(task => !task.ClosedAt.HasValue || task.ClosedAt > sprint.BeginAt)
+				.ToArray();
 		}
 	}
 }

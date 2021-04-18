@@ -6,14 +6,11 @@ namespace Model
 	{
 		public static void AddGiraModel(this IServiceCollection services, string gitHubPem)
 		{
-			services.AddTransient<IGitHubWrapper, GiraGitHubWrapper>(_ => new GiraGitHubWrapper(gitHubPem));
-			services.AddTransient<IGitHubFacade, GiraGitHubFacade>();
+			services.AddTransient<IGitHubFacade, GiraGitHubFacade>(_ => new GiraGitHubFacade(gitHubPem));
 			services.AddSingleton<ICalendar, GiraCalendar>();
 			services.AddSingleton<Burndown>();
 			services.AddSingleton<Velocity>();
 			services.AddSingleton<IssueCycleTime>();
-			services.AddSingleton<ReposDataSource>();
-			services.AddSingleton<SprintsDataSource>();
 			services.AddSingleton<GiraProjectsDirectory>();
 		}
 	}

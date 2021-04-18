@@ -5,30 +5,23 @@ namespace Model
 {
 	public class IssueCycleTime
 	{
-		private ReposDataSource Repos { get; }
+		private GiraProjectsDirectory Directory { get; }
 
-		public IssueCycleTime(ReposDataSource repos)
+		public IssueCycleTime(GiraProjectsDirectory directory)
 		{
-			Repos = repos;
+			Directory = directory;
 		}
 
-		public IReadOnlyCollection<IssueCycleTimeNode> GetMetric(long installationId, long repoId)
+		public IReadOnlyCollection<IssueCycleTimeNode> GetMetric(int projectId)
 		{
-			var repoIssues = Repos.GetRepoIssues(installationId, repoId);
-
-			return GetMetricNodes(repoIssues)
+			return Directory
+				.GetGiraProjectTasks(projectId)
+				.Select(task => new IssueCycleTimeNode(
+					task.Title,
+					task.CreatedAt,
+					task.ClosedAt,
+					task.Labels.ToArray()))
 				.ToArray();
-		}
-
-		private IEnumerable<IssueCycleTimeNode> GetMetricNodes(IReadOnlyCollection<Issue> repoIssues)
-		{
-			foreach (var issue in repoIssues) {
-				yield return new IssueCycleTimeNode(
-					issue.Title,
-					issue.CreateAt,
-					issue.ClosedAt,
-					issue.Labels.ToArray());
-			}
 		}
 	}
 }

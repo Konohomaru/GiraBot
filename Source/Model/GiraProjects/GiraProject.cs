@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System;
 
 namespace Model
 {
@@ -10,15 +10,15 @@ namespace Model
 
 		public int SprintDefaultDaysCount { get; private set; } = 7;
 
-		public IReadOnlyCollection<GiraTask> Tasks { get; private set; }
+		public DateTime StartSprintsAt { get; private set; }
 
 		public GitHubSettings GitHubSettings { get; private set; }
 
-		public GiraProject(int id, string name, GiraTask[] tasks, GitHubSettings gitHubSettings)
+		public GiraProject(int id, string name, DateTime startSprintsAt, GitHubSettings gitHubSettings)
 		{
 			Id = id;
 			Name = name;
-			Tasks = tasks;
+			StartSprintsAt = startSprintsAt;
 			GitHubSettings = gitHubSettings;
 		}
 	}

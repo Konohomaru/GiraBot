@@ -7,24 +7,29 @@ namespace Model
 	{
 		private ICalendar Calendar { get; }
 
-		private SprintsDataSource Sprints { get; }
+		private GiraProjectsDirectory Directory { get; }
 
-		public Burndown(ICalendar calendar, SprintsDataSource sprints)
+		public Burndown(ICalendar calendar, GiraProjectsDirectory directory)
 		{
 			Calendar = calendar;
-			Sprints = sprints;
+			Directory = directory;
 		}
 
-		public IReadOnlyCollection<BurndownNode> GetMetric(long installationId, long repoId)
+		public IReadOnlyCollection<BurndownNode> GetMetric(int projectId)
 		{
-			var sprint = Sprints.GetRepoLatestSprint(installationId, repoId);
+			var sprint = Directory
+				.GetGiraProjectSprints(projectId)
+				.Last();
 
-			var sprintIssues = Sprints.GetSprintIssues(installationId, repoId, sprint.Id);
+			var sprintTasks = Directory
+				.GetGiraProjectTasks(projectId)
+				.GetSprintTasks(sprint)
+				.ToArray();
 
-			return GetMetricNodes(sprint, sprintIssues).ToArray();
+			return GetMetricNodes(sprint, sprintTasks).ToArray();
 		}
 
-		private IEnumerable<BurndownNode> GetMetricNodes(Sprint sprint, IReadOnlyCollection<Issue> sprintIssues)
+		private IEnumerable<BurndownNode> GetMetricNodes(Sprint sprint, IReadOnlyCollection<GiraTask> sprintTasks)
 		{
 			var today = Calendar.GetCurrentUtcDateTime();
 			var currentDay = sprint.BeginAt;
@@ -32,7 +37,7 @@ namespace Model
 			while (sprint.ContainesDate(currentDay) && currentDay <= today) {
 				yield return new BurndownNode(
 					currentDay,
-					sprintIssues.Count(issue => issue.ClosedAt is null || issue.ClosedAt <= currentDay));
+					sprintTasks.Count(issue => issue.ClosedAt is null || issue.ClosedAt <= currentDay));
 				currentDay = currentDay.AddDays(1);
 			}
 		}
