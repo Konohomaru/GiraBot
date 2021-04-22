@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace WebAPI
 {
-	public class IssueCycleTimeNodeDto
+	public class TaskCycleTimeNodeDto
 	{
 		public string Title { get; set; }
 
@@ -16,9 +16,9 @@ namespace WebAPI
 
 		public IReadOnlyCollection<string> Labels { get; set; }
 
-		public static IssueCycleTimeNodeDto BuildFrom(TaskCycleTimeNode node)
+		public static TaskCycleTimeNodeDto BuildFrom(TaskCycleTimeNode node)
 		{
-			return new IssueCycleTimeNodeDto {
+			return new TaskCycleTimeNodeDto {
 				Title = node.Title,
 				CreatedAt = node.CreatedAt,
 				ClosedAt = node.ClosedAt,

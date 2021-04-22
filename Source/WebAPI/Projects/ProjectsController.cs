@@ -16,14 +16,18 @@ namespace WebAPI
 
 		private Velocity Velocity { get; }
 
+		private TaskCycleTime TaskCycleTime { get; }
+
 		public ProjectsController(
 			IProjectsDirectory directory,
 			Burndown burndown,
-			Velocity velocity)
+			Velocity velocity,
+			TaskCycleTime taskCycleTime)
 		{
 			Directory = directory;
 			Burndown = burndown;
 			Velocity = velocity;
+			TaskCycleTime = taskCycleTime;
 		}
 
 		[HttpGet]
@@ -105,6 +109,16 @@ namespace WebAPI
 			return Velocity
 				.GetMetric(projectId)
 				.Select(node => VelocityNodeDto.BuildFrom(node))
+				.ToArray();
+		}
+
+		[HttpGet]
+		[Route("{projectId}/taskcycletime")]
+		public TaskCycleTimeNodeDto[] GetTaskCycleTimeMetric(int projectId)
+		{
+			return TaskCycleTime
+				.GetMetric(projectId)
+				.Select(node => TaskCycleTimeNodeDto.BuildFrom(node))
 				.ToArray();
 		}
 	}
