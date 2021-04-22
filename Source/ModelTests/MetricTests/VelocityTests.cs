@@ -10,7 +10,7 @@ namespace ModelTests
 	{
 		private Mock<ICalendar> CalendarMock { get; }
 
-		private Mock<IProjectsDirectory> DirectoryMock { get; }
+		private Mock<IProjectsRepository> DirectoryMock { get; }
 
 		private Velocity Velocity { get; }
 

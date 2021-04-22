@@ -6,15 +6,15 @@ using Xunit;
 
 namespace ModelTests
 {
-	public class ProjectDirectoryTests
+	public class ProjectRepositoryTests
 	{
 		private Mock<ICalendar> CalendarMock { get; }
 
 		private Mock<IGitHubFacade> FacadeMock { get; }
 
-		private ProjectsDirectory Directory { get; }
+		private ProjectsRepository Directory { get; }
 
-		public ProjectDirectoryTests()
+		public ProjectRepositoryTests()
 		{
 			CalendarMock = new();
 			FacadeMock = new();

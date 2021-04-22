@@ -10,7 +10,7 @@ namespace WebAPI
 	[Route("[controller]")]
 	public class ProjectsController : Controller
 	{
-		private IProjectsDirectory Directory { get; }
+		private IProjectsRepository Directory { get; }
 
 		private Burndown Burndown { get; }
 
@@ -19,7 +19,7 @@ namespace WebAPI
 		private TaskCycleTime TaskCycleTime { get; }
 
 		public ProjectsController(
-			IProjectsDirectory directory,
+			IProjectsRepository directory,
 			Burndown burndown,
 			Velocity velocity,
 			TaskCycleTime taskCycleTime)

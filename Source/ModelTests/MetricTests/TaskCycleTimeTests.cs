@@ -8,7 +8,7 @@ namespace ModelTests
 {
 	public class TaskCycleTimeTests
 	{
-		private Mock<IProjectsDirectory> DirectoryMock { get; }
+		private Mock<IProjectsRepository> DirectoryMock { get; }
 
 		private TaskCycleTime IssueCycleTime { get; }
 

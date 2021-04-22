@@ -2,7 +2,7 @@
 
 namespace Model
 {
-	public interface IProjectsDirectory
+	public interface IProjectsRepository
 	{
 		GitHubSettings GetProjectGitHubSettings(int projectId);
 

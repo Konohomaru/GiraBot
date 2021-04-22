@@ -5,9 +5,9 @@ namespace Model
 {
 	public class TaskCycleTime
 	{
-		private IProjectsDirectory Directory { get; }
+		private IProjectsRepository Directory { get; }
 
-		public TaskCycleTime(IProjectsDirectory directory)
+		public TaskCycleTime(IProjectsRepository directory)
 		{
 			Directory = directory;
 		}

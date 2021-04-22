@@ -11,7 +11,7 @@ namespace Model
 			services.AddSingleton<Burndown>();
 			services.AddSingleton<Velocity>();
 			services.AddSingleton<TaskCycleTime>();
-			services.AddSingleton<IProjectsDirectory, ProjectsDirectory>();
+			services.AddSingleton<IProjectsRepository, ProjectsRepository>();
 		}
 	}
 }

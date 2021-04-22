@@ -3,13 +3,13 @@ using System.Linq;
 
 namespace Model
 {
-	public class ProjectsDirectory : IProjectsDirectory
+	public class ProjectsRepository : IProjectsRepository
 	{
 		private ICalendar Calendar { get; }
 
 		private IGitHubFacade GitHubClient { get; }
 
-		public ProjectsDirectory(ICalendar calendar, IGitHubFacade facade)
+		public ProjectsRepository(ICalendar calendar, IGitHubFacade facade)
 		{
 			Calendar = calendar;
 			GitHubClient = facade;
