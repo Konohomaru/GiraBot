@@ -26,7 +26,7 @@ namespace Model
 			CreatedAt = createdAt;
 			ClosedAt = closedAt;
 			Title = title;
-			Labels = labels;
+			Labels = labels ?? Array.Empty<string>();
 		}
 	}
 }
