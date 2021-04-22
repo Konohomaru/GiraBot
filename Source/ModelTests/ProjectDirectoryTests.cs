@@ -92,5 +92,41 @@ namespace ModelTests
 			Assert.Equal(new DateTime(2021, 01, 22), actualSprints.ElementAt(3).BeginsAt);
 			Assert.Equal(new DateTime(2021, 01, 29), actualSprints.ElementAt(4).BeginsAt);
 		}
+
+		[Fact]
+		public void GetProjectTasks_OneTaskInAndOneOutOfProject_OneInProjectTask()
+		{
+			FacadeMock
+				.Setup(facade => facade.GetRepositoryIssues(It.IsAny<long>(), It.IsAny<long>()))
+				.Returns(new[] {
+					new Issue(
+						id: 0,
+						createAt: new(),
+						updateAt: new(),
+						closedAt: null,
+						title: null,
+						labels: null,
+						projects: new[] {
+							new RepositoryProject(0, "project 1")
+						},
+						state: IssueState.Open),
+
+					new Issue(
+						id: 1,
+						createAt: new(),
+						updateAt: new(),
+						closedAt: null,
+						title: null,
+						labels: null,
+						projects: new[] {
+							new RepositoryProject(3720514, "Caprica2.0")
+						},
+						state: IssueState.Open),
+				});
+
+			var actualProjectTasks = Directory.GetProjectTasks(0).Single();
+
+			Assert.Equal(1, actualProjectTasks.Id);
+		}
 	}
 }

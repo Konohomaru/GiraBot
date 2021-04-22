@@ -1,6 +1,8 @@
-﻿namespace Model
+﻿using System;
+
+namespace Model
 {
-	public class RepositoryProject
+	public class RepositoryProject : IComparable
 	{
 		public int Id { get; private set; }
 
@@ -10,6 +12,11 @@
 		{
 			Id = id;
 			Name = name;
+		}
+
+		public int CompareTo(object obj)
+		{
+			return Id.CompareTo((obj as RepositoryProject).Id);
 		}
 	}
 }
