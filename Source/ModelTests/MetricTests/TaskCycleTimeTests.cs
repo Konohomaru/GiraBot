@@ -6,13 +6,13 @@ using Xunit;
 
 namespace ModelTests
 {
-	public class IssueCycleTimeTests
+	public class TaskCycleTimeTests
 	{
 		private Mock<IProjectsDirectory> DirectoryMock { get; }
 
-		private IssueCycleTime IssueCycleTime { get; }
+		private TaskCycleTime IssueCycleTime { get; }
 
-		public IssueCycleTimeTests()
+		public TaskCycleTimeTests()
 		{
 			DirectoryMock = new();
 			IssueCycleTime = new(DirectoryMock.Object);

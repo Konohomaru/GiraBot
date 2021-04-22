@@ -10,7 +10,7 @@ namespace Model
 			services.AddSingleton<ICalendar, GiraCalendar>();
 			services.AddSingleton<Burndown>();
 			services.AddSingleton<Velocity>();
-			services.AddSingleton<IssueCycleTime>();
+			services.AddSingleton<TaskCycleTime>();
 			services.AddSingleton<IProjectsDirectory, ProjectsDirectory>();
 		}
 	}

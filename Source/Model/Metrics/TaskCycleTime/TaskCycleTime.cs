@@ -3,20 +3,20 @@ using System.Linq;
 
 namespace Model
 {
-	public class IssueCycleTime
+	public class TaskCycleTime
 	{
 		private IProjectsDirectory Directory { get; }
 
-		public IssueCycleTime(IProjectsDirectory directory)
+		public TaskCycleTime(IProjectsDirectory directory)
 		{
 			Directory = directory;
 		}
 
-		public IReadOnlyCollection<IssueCycleTimeNode> GetMetric(int projectId)
+		public IReadOnlyCollection<TaskCycleTimeNode> GetMetric(int projectId)
 		{
 			return Directory
 				.GetProjectTasks(projectId)
-				.Select(task => new IssueCycleTimeNode(
+				.Select(task => new TaskCycleTimeNode(
 					task.Title,
 					task.CreatedAt,
 					task.ClosedAt,

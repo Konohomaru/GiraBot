@@ -16,7 +16,7 @@ namespace WebAPI
 
 		public IReadOnlyCollection<string> Labels { get; set; }
 
-		public static IssueCycleTimeNodeDto BuildFrom(IssueCycleTimeNode node)
+		public static IssueCycleTimeNodeDto BuildFrom(TaskCycleTimeNode node)
 		{
 			return new IssueCycleTimeNodeDto {
 				Title = node.Title,

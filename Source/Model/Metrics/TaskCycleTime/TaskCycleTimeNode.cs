@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Model
 {
-	public class IssueCycleTimeNode
+	public class TaskCycleTimeNode
 	{
 		public string Title { get; private set; }
 
@@ -13,7 +13,7 @@ namespace Model
 
 		public IReadOnlyCollection<string> Labels { get; private set; }
 
-		public IssueCycleTimeNode(
+		public TaskCycleTimeNode(
 			string title,
 			DateTime createdAt,
 			DateTime? closedAt,
