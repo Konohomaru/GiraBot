@@ -8,9 +8,9 @@ namespace Model
 
 		public string Name { get; private set; }
 
-		public int SprintDefaultDaysCount { get; private set; } = 7;
+		public int SprtinDurationDays { get; private set; } = 7;
 
-		public DateTime StartSprintsAt { get; private set; }
+		public DateTime BeginSprintsAt { get; private set; }
 
 		public GitHubSettings GitHubSettings { get; private set; }
 
@@ -18,7 +18,7 @@ namespace Model
 		{
 			Id = id;
 			Name = name;
-			StartSprintsAt = startSprintsAt;
+			BeginSprintsAt = startSprintsAt;
 			GitHubSettings = gitHubSettings;
 		}
 	}

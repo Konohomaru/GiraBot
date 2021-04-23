@@ -8,14 +8,14 @@ namespace ModelTests
 {
 	public class TaskCycleTimeTests
 	{
-		private Mock<IProjectsRepository> DirectoryMock { get; }
+		private Mock<IProjectsRepository> RepositoryMock { get; }
 
-		private TaskCycleTime IssueCycleTime { get; }
+		private TaskCycleTime TaskCycleTime { get; }
 
 		public TaskCycleTimeTests()
 		{
-			DirectoryMock = new();
-			IssueCycleTime = new(DirectoryMock.Object);
+			RepositoryMock = new();
+			TaskCycleTime = new(RepositoryMock.Object);
 		}
 
 		[Fact]
@@ -24,13 +24,13 @@ namespace ModelTests
 			var taskCreatedTime = new DateTime(2021, 01, 01);
 			var taskClosedTime = new DateTime(2021, 01, 02);
 
-			DirectoryMock
+			RepositoryMock
 				.Setup(directory => directory.GetProjectTasks(It.IsAny<int>()))
 				.Returns(new[] {
 					new GiraTask(0, taskCreatedTime, taskClosedTime, "task", null)
 				});
 
-			var actualMetric = IssueCycleTime
+			var actualMetric = TaskCycleTime
 				.GetMetric(0)
 				.Single();
 
@@ -43,13 +43,13 @@ namespace ModelTests
 		{
 			var taskCreatedTime = new DateTime(2021, 01, 01);
 
-			DirectoryMock
+			RepositoryMock
 				.Setup(directory => directory.GetProjectTasks(It.IsAny<int>()))
 				.Returns(new[] {
 					new GiraTask(0, taskCreatedTime, null, "task", null)
 				});
 
-			var actualMetric = IssueCycleTime
+			var actualMetric = TaskCycleTime
 				.GetMetric(0)
 				.Single();
 

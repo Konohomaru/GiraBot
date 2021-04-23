@@ -8,10 +8,10 @@ namespace Model
 
 		public int RemainingTasks { get; private set; }
 
-		public BurndownNode(DateTime dateStamp, int remainingIssues)
+		public BurndownNode(DateTime day, int remainingTasks)
 		{
-			Day = dateStamp;
-			RemainingTasks = remainingIssues;
+			Day = day;
+			RemainingTasks = remainingTasks;
 		}
 	}
 }

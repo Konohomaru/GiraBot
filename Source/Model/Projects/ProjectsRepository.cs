@@ -20,10 +20,10 @@ namespace Model
 			return new GitHubSettings(
 				installationId: 15161810,
 				repositoryId: 229932826,
-				lanes: new[] {
-					new Lane(0, "Bugs", "bug"),
-					new Lane(1, "Tech Debts", "tech debt"),
-					new Lane(2, "Road Map", "road map")
+				lines: new[] {
+					new Line(0, "Bugs", "bug"),
+					new Line(1, "Tech Debts", "tech debt"),
+					new Line(2, "Road Map", "road map")
 				},
 				allowedProjects: new[] { new RepositoryProject(3720514, "Caprica2.0") });
 		}
@@ -46,16 +46,16 @@ namespace Model
 		public IEnumerable<Sprint> GetProjectSprints(int projectId)
 		{
 			var giraProject = GetProject(projectId);
-			var currentSpritnStartDay = giraProject.StartSprintsAt;
+			var iterationSprntBeginingDay = giraProject.BeginSprintsAt;
 			var today = Calendar.GetCurrentUtcDateTime();
 
-			while (currentSpritnStartDay <= today) {
+			while (iterationSprntBeginingDay <= today) {
 				yield return new Sprint(
-					id: currentSpritnStartDay.DayOfYear,
-					beginAt: currentSpritnStartDay,
-					duration: giraProject.SprintDefaultDaysCount);
+					id: iterationSprntBeginingDay.DayOfYear,
+					beginAt: iterationSprntBeginingDay,
+					durationDays: giraProject.SprtinDurationDays);
 
-				currentSpritnStartDay = currentSpritnStartDay.AddDays(giraProject.SprintDefaultDaysCount);
+				iterationSprntBeginingDay = iterationSprntBeginingDay.AddDays(giraProject.SprtinDurationDays);
 			}
 		}
 
@@ -67,7 +67,7 @@ namespace Model
 				.GetRepositoryIssues(
 					installationId: gitHubSettings.InstallationId,
 					repositoryId: gitHubSettings.RepositoryId)
-				.Where(issue => issue.Projects.ContainsAny(gitHubSettings.AllowedProjects))
+				.Where(issue => issue.Projects.ContainsAnyOf(gitHubSettings.AllowedProjects))
 				.Select(issue => new GiraTask(
 					id: issue.Id,
 					createdAt: issue.CreateAt,

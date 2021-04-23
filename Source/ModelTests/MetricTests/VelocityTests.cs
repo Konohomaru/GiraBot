@@ -14,7 +14,7 @@ namespace ModelTests
 
 		private Velocity Velocity { get; }
 
-		private Lane[] Lanes { get; }
+		private Line[] Lanes { get; }
 
 		public VelocityTests()
 		{
@@ -23,9 +23,9 @@ namespace ModelTests
 			Velocity = new(CalendarMock.Object, DirectoryMock.Object);
 
 			Lanes = new[] { 
-				new Lane(0, "Documents", "docs"),
-				new Lane(1, "Tech Debts", "tech debts"),
-				new Lane(2, "Bug Fixes", "bugs")
+				new Line(0, "Documents", "docs"),
+				new Line(1, "Tech Debts", "tech debts"),
+				new Line(2, "Bug Fixes", "bugs")
 			};
 
 			DirectoryMock
@@ -37,7 +37,7 @@ namespace ModelTests
 					gitHubSettings: new(
 						installationId: 123456, 
 						repositoryId: 123457,
-						lanes: Lanes,
+						lines: Lanes,
 						allowedProjects: null)));
 		}
 
@@ -62,10 +62,10 @@ namespace ModelTests
 
 			var actualMetric = Velocity.GetMetric(0).Single();
 
-			Assert.Equal(3, actualMetric.CompletedTasksByLane.Count);
-			Assert.Equal(1, actualMetric.CompletedTasksByLane[Lanes[0]]);
-			Assert.Equal(1, actualMetric.CompletedTasksByLane[Lanes[1]]);
-			Assert.Equal(1, actualMetric.CompletedTasksByLane[Lanes[2]]);
+			Assert.Equal(3, actualMetric.ClosetTasksByLane.Count);
+			Assert.Equal(1, actualMetric.ClosetTasksByLane[Lanes[0]]);
+			Assert.Equal(1, actualMetric.ClosetTasksByLane[Lanes[1]]);
+			Assert.Equal(1, actualMetric.ClosetTasksByLane[Lanes[2]]);
 		}
 
 		[Fact]
@@ -87,10 +87,10 @@ namespace ModelTests
 
 			var actualMetric = Velocity.GetMetric(0).Single();
 
-			Assert.Equal(3, actualMetric.CompletedTasksByLane.Count);
-			Assert.Equal(1, actualMetric.CompletedTasksByLane[Lanes[0]]);
-			Assert.Equal(0, actualMetric.CompletedTasksByLane[Lanes[1]]);
-			Assert.Equal(0, actualMetric.CompletedTasksByLane[Lanes[2]]);
+			Assert.Equal(3, actualMetric.ClosetTasksByLane.Count);
+			Assert.Equal(1, actualMetric.ClosetTasksByLane[Lanes[0]]);
+			Assert.Equal(0, actualMetric.ClosetTasksByLane[Lanes[1]]);
+			Assert.Equal(0, actualMetric.ClosetTasksByLane[Lanes[2]]);
 		}
 
 		[Fact]
@@ -110,10 +110,10 @@ namespace ModelTests
 
 			var actualMetric = Velocity.GetMetric(0).Single();
 
-			Assert.Equal(3, actualMetric.CompletedTasksByLane.Count);
-			Assert.Equal(0, actualMetric.CompletedTasksByLane[Lanes[0]]);
-			Assert.Equal(0, actualMetric.CompletedTasksByLane[Lanes[1]]);
-			Assert.Equal(0, actualMetric.CompletedTasksByLane[Lanes[2]]);
+			Assert.Equal(3, actualMetric.ClosetTasksByLane.Count);
+			Assert.Equal(0, actualMetric.ClosetTasksByLane[Lanes[0]]);
+			Assert.Equal(0, actualMetric.ClosetTasksByLane[Lanes[1]]);
+			Assert.Equal(0, actualMetric.ClosetTasksByLane[Lanes[2]]);
 		}
 
 		[Fact]
@@ -140,13 +140,13 @@ namespace ModelTests
 
 			var actualMetric = Velocity.GetMetric(0);
 
-			Assert.Equal(3, actualMetric.ElementAt(0).CompletedTasksByLane.Count);
-			Assert.Equal(1, actualMetric.ElementAt(0).CompletedTasksByLane[Lanes[0]]);
-			Assert.Equal(1, actualMetric.ElementAt(0).CompletedTasksByLane[Lanes[1]]);
-			Assert.Equal(1, actualMetric.ElementAt(0).CompletedTasksByLane[Lanes[2]]);
-			Assert.Equal(2, actualMetric.ElementAt(1).CompletedTasksByLane[Lanes[0]]);
-			Assert.Equal(2, actualMetric.ElementAt(1).CompletedTasksByLane[Lanes[1]]);
-			Assert.Equal(2, actualMetric.ElementAt(1).CompletedTasksByLane[Lanes[2]]);
+			Assert.Equal(3, actualMetric.ElementAt(0).ClosetTasksByLane.Count);
+			Assert.Equal(1, actualMetric.ElementAt(0).ClosetTasksByLane[Lanes[0]]);
+			Assert.Equal(1, actualMetric.ElementAt(0).ClosetTasksByLane[Lanes[1]]);
+			Assert.Equal(1, actualMetric.ElementAt(0).ClosetTasksByLane[Lanes[2]]);
+			Assert.Equal(2, actualMetric.ElementAt(1).ClosetTasksByLane[Lanes[0]]);
+			Assert.Equal(2, actualMetric.ElementAt(1).ClosetTasksByLane[Lanes[1]]);
+			Assert.Equal(2, actualMetric.ElementAt(1).ClosetTasksByLane[Lanes[2]]);
 		}
 	}
 }

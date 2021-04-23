@@ -6,7 +6,7 @@ namespace Model
 {
 	public static class IEnumerableExtenstions
 	{
-		public static bool ContainsAny(
+		public static bool ContainsAnyOf(
 			this IEnumerable<RepositoryProject> source,
 			IEnumerable<RepositoryProject> collection)
 		{

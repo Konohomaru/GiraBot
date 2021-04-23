@@ -14,7 +14,7 @@ namespace WebAPI
 		{
 			return new VelocityNodeDto {
 				SprintDay = node.Day,
-				IssuesByLane = node.CompletedTasksByLane
+				IssuesByLane = node.ClosetTasksByLane
 					.Select(item => VelocityLaneDto.BuildFrom(LaneDto.BuildFrom(item.Key), item.Value))
 					.ToArray()
 			};

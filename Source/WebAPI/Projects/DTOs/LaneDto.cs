@@ -8,11 +8,11 @@ namespace WebAPI
 
 		public string MappedLabelName { get; set; }
 
-		public static LaneDto BuildFrom(Lane lane)
+		public static LaneDto BuildFrom(Line lane)
 		{
 			return new LaneDto {
 				Name = lane.Name,
-				MappedLabelName = lane.MappedName
+				MappedLabelName = lane.MappedAlias
 			};
 		}
 	}

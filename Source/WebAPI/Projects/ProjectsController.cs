@@ -41,12 +41,12 @@ namespace WebAPI
 				Name = giraProject.Name,
 				InstallationId = giraProject.GitHubSettings.InstallationId,
 				RepositoryId = giraProject.GitHubSettings.RepositoryId,
-				SprintDefaultDaysCount = giraProject.SprintDefaultDaysCount,
+				SprintDefaultDaysCount = giraProject.SprtinDurationDays,
 				Lanes = giraProject.GitHubSettings.Lanes
 					.Select(lane =>
 						new LaneDto {
 							Name = lane.Name,
-							MappedLabelName = lane.MappedName
+							MappedLabelName = lane.MappedAlias
 						})
 					.ToArray(),
 				AllowedProjects = giraProject.GitHubSettings.AllowedProjects

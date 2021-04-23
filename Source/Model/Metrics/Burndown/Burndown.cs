@@ -7,40 +7,40 @@ namespace Model
 	{
 		private ICalendar Calendar { get; }
 
-		private IProjectsRepository Directory { get; }
+		private IProjectsRepository Repository { get; }
 
-		public Burndown(ICalendar calendar, IProjectsRepository directory)
+		public Burndown(ICalendar calendar, IProjectsRepository repository)
 		{
 			Calendar = calendar;
-			Directory = directory;
+			Repository = repository;
 		}
 
 		public IReadOnlyCollection<BurndownNode> GetMetric(int projectId)
 		{
-			var sprint = Directory
+			var latestSprint = Repository
 				.GetProjectSprints(projectId)
 				.Last();
 
-			var sprintTasks = Directory
+			var sprintTasks = Repository
 				.GetProjectTasks(projectId)
-				.GetSprintTasks(sprint)
+				.GetSprintTasks(latestSprint)
 				.ToArray();
 
-			return GetMetricNodes(sprint, sprintTasks).ToArray();
+			return GetMetricNodes(latestSprint, sprintTasks).ToArray();
 		}
 
-		private IEnumerable<BurndownNode> GetMetricNodes(Sprint sprint, IReadOnlyCollection<GiraTask> sprintTasks)
+		private IEnumerable<BurndownNode> GetMetricNodes(Sprint latestSprint, IReadOnlyCollection<GiraTask> sprintTasks)
 		{
 			var today = Calendar.GetCurrentUtcDateTime();
-			var currentDay = sprint.BeginsAt;
+			var iterationDay = latestSprint.BeginsAt;
 
-			while (sprint.ContainsDate(currentDay) && currentDay <= today) {
+			while (latestSprint.ContainsDate(iterationDay) && iterationDay <= today) {
 				yield return new BurndownNode(
-					currentDay,
-					sprintTasks.Count(issue =>
-						issue.CreatedAt <= currentDay &&
-						(!issue.ClosedAt.HasValue || issue.ClosedAt > currentDay)));
-				currentDay = currentDay.AddDays(1);
+					iterationDay,
+					sprintTasks.Count(task =>
+						task.CreatedAt <= iterationDay &&
+						(!task.ClosedAt.HasValue || task.ClosedAt > iterationDay)));
+				iterationDay = iterationDay.AddDays(1);
 			}
 		}
 	}

@@ -5,16 +5,16 @@ namespace Model
 {
 	public class TaskCycleTime
 	{
-		private IProjectsRepository Directory { get; }
+		private IProjectsRepository Repository { get; }
 
-		public TaskCycleTime(IProjectsRepository directory)
+		public TaskCycleTime(IProjectsRepository repository)
 		{
-			Directory = directory;
+			Repository = repository;
 		}
 
 		public IReadOnlyCollection<TaskCycleTimeNode> GetMetric(int projectId)
 		{
-			return Directory
+			return Repository
 				.GetProjectTasks(projectId)
 				.Select(task => new TaskCycleTimeNode(
 					task.Title,

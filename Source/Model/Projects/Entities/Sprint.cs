@@ -12,11 +12,11 @@ namespace Model
 
 		public DateTime EndsAt => BeginsAt.AddDays(DaysCount);
 
-		public Sprint(int id, DateTime beginAt, int duration)
+		public Sprint(int id, DateTime beginAt, int durationDays)
 		{
 			Id = id;
 			BeginsAt = beginAt;
-			DaysCount = duration;
+			DaysCount = durationDays;
 		}
 
 		public bool ContainsDate(DateTime date)
