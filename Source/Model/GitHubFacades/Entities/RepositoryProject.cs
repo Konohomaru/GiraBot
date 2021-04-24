@@ -16,7 +16,7 @@ namespace Model
 
 		public int CompareTo(object obj)
 		{
-			return Id.CompareTo((obj as RepositoryProject).Id);
+			return Id.CompareTo((obj as RepositoryProject)?.Id);
 		}
 	}
 }
