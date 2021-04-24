@@ -4,9 +4,9 @@ namespace Model
 {
 	public static class IServiceCollectionExtension
 	{
-		public static void AddGiraModel(this IServiceCollection services, string gitHubPem)
+		public static void AddGiraModel(this IServiceCollection services, ITasksDataSource tasksDataSource)
 		{
-			services.AddTransient<IGitHubFacade, GiraGitHubFacade>(_ => new GiraGitHubFacade(gitHubPem));
+			services.AddSingleton(tasksDataSource);
 			services.AddSingleton<ICalendar, GiraCalendar>();
 			services.AddSingleton<Burndown>();
 			services.AddSingleton<Velocity>();

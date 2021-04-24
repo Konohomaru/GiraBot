@@ -49,7 +49,7 @@ namespace WebAPI
 							MappedLabelName = lane.MappedAlias
 						})
 					.ToArray(),
-				AllowedProjects = giraProject.GitHubSettings.AllowedProjects
+				AllowedProjects = giraProject.GitHubSettings.AllowedProjectIds
 					.Select(allowedProject =>
 						new RepositoryProjectDto {
 							Id = allowedProject.Id,

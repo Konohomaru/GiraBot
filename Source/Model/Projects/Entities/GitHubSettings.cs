@@ -10,18 +10,18 @@ namespace Model
 
 		public IReadOnlyCollection<Line> Lanes { get; private set; }
 
-		public IReadOnlyCollection<RepositoryProject> AllowedProjects { get; private set; }
+		public IReadOnlyCollection<int> AllowedProjectIds { get; private set; }
 
 		public GitHubSettings(
 			long installationId,
 			long repositoryId,
 			Line[] lines,
-			RepositoryProject[] allowedProjects)
+			int[] allowedProjectIds)
 		{
 			InstallationId = installationId;
 			RepositoryId = repositoryId;
 			Lanes = lines;
-			AllowedProjects = allowedProjects;
+			AllowedProjectIds = allowedProjectIds;
 		}
 	}
 }

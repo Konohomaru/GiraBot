@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Integrations\Integrations.csproj" />
     <ProjectReference Include="..\Model\Model.csproj" />
   </ItemGroup>
 

@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Model;
+using System;
 
 namespace WebAPI
 {
@@ -17,11 +18,11 @@ namespace WebAPI
 			Configuration = configuration;
 		}
 
-		public void ConfigureServices(IServiceCollection services)
+		public void ConfigureServices(IServiceProvider provider, IServiceCollection services)
 		{
 			services.AddControllers();
 			services.AddHealthChecks();
-			services.AddGiraModel(Configuration["Pem"]);
+			services.AddGiraModel(new GitHubTasksDataSource(new GiraGitHubFacade(Configuration["Pem"])));
 			services
 				.AddAuthentication("BasicAuthentication")
 				.AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);

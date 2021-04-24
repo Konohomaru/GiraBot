@@ -38,7 +38,7 @@ namespace ModelTests
 						installationId: 123456, 
 						repositoryId: 123457,
 						lines: Lanes,
-						allowedProjects: null)));
+						allowedProjectIds: null)));
 		}
 
 		[Fact]

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 namespace Model
 {
@@ -7,40 +6,29 @@ namespace Model
 	{
 		private ICalendar Calendar { get; }
 
-		private IGitHubFacade GitHubClient { get; }
+		private ITasksDataSource TasksDataSource { get; }
 
-		public ProjectsRepository(ICalendar calendar, IGitHubFacade facade)
+		public ProjectsRepository(ICalendar calendar, ITasksDataSource tasksDataSource)
 		{
 			Calendar = calendar;
-			GitHubClient = facade;
-		}
-
-		public GitHubSettings GetProjectGitHubSettings(int projectId)
-		{
-			return new GitHubSettings(
-				installationId: 15161810,
-				repositoryId: 229932826,
-				lines: new[] {
-					new Line(0, "Bugs", "bug"),
-					new Line(1, "Tech Debts", "tech debt"),
-					new Line(2, "Road Map", "road map")
-				},
-				allowedProjects: new[] { new RepositoryProject(3720514, "Caprica2.0") });
+			TasksDataSource = tasksDataSource;
 		}
 
 		public Project GetProject(int projectId)
 		{
-			var gitHubSettings = GetProjectGitHubSettings(projectId);
-
-			var gitHubRepository = GitHubClient.GetRepository(
-				installationId: gitHubSettings.InstallationId,
-				repositoryId: gitHubSettings.RepositoryId);
-
 			return new Project(
 				id: 0,
-				name: gitHubRepository.FullName,
-				startSprintsAt: gitHubRepository.CreatedAt,
-				gitHubSettings: gitHubSettings);
+				name: "mindbox-moscow/issues-devx",
+				startSprintsAt: new(2021, 01, 01),
+				gitHubSettings: new GitHubSettings(
+					installationId: 15161810,
+					repositoryId: 229932826,
+					lines: new[] {
+						new Line(0, "Bugs", "bug"),
+						new Line(1, "Tech Debts", "tech debt"),
+						new Line(2, "Road Map", "road map")
+					},
+					allowedProjectIds: new[] { 3720514 }));
 		}
 
 		public IEnumerable<Sprint> GetProjectSprints(int projectId)
@@ -49,7 +37,8 @@ namespace Model
 			var iterationSprntBeginingDay = giraProject.BeginSprintsAt;
 			var today = Calendar.GetCurrentUtcDateTime();
 
-			while (iterationSprntBeginingDay <= today) {
+			while (iterationSprntBeginingDay <= today)
+			{
 				yield return new Sprint(
 					id: iterationSprntBeginingDay.DayOfYear,
 					beginAt: iterationSprntBeginingDay,
@@ -61,20 +50,7 @@ namespace Model
 
 		public IReadOnlyCollection<GiraTask> GetProjectTasks(int projectId)
 		{
-			var gitHubSettings = GetProjectGitHubSettings(projectId);
-
-			return GitHubClient
-				.GetRepositoryIssues(
-					installationId: gitHubSettings.InstallationId,
-					repositoryId: gitHubSettings.RepositoryId)
-				.Where(issue => issue.Projects.ContainsAnyOf(gitHubSettings.AllowedProjects))
-				.Select(issue => new GiraTask(
-					id: issue.Id,
-					createdAt: issue.CreateAt,
-					closedAt: issue.ClosedAt,
-					title: issue.Title,
-					labels: issue.Labels))
-				.ToArray();
+			return TasksDataSource.GetProjectTasks(GetProject(projectId));
 		}
 	}
 }
