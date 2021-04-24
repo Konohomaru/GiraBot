@@ -18,7 +18,7 @@ namespace WebAPI
 			Configuration = configuration;
 		}
 
-		public void ConfigureServices(IServiceProvider provider, IServiceCollection services)
+		public void ConfigureServices(IServiceCollection services)
 		{
 			services.AddControllers();
 			services.AddHealthChecks();
