@@ -34,29 +34,7 @@ namespace WebAPI
 		[Route("{projectId}")]
 		public ProjectDto GetGiraProject(int projectId)
 		{
-			var giraProject = Directory.GetProject(projectId);
-
-			return new ProjectDto {
-				Id = giraProject.Id,
-				Name = giraProject.Name,
-				InstallationId = giraProject.GitHubSettings.InstallationId,
-				RepositoryId = giraProject.GitHubSettings.RepositoryId,
-				SprintDefaultDaysCount = giraProject.SprtinDurationDays,
-				Lanes = giraProject.GitHubSettings.Lanes
-					.Select(lane =>
-						new LaneDto {
-							Name = lane.Name,
-							MappedLabelName = lane.MappedAlias
-						})
-					.ToArray(),
-				AllowedProjects = giraProject.GitHubSettings.AllowedProjectIds
-					.Select(allowedProject =>
-						new RepositoryProjectDto {
-							Id = allowedProject.Id,
-							Name = allowedProject.Name
-						})
-					.ToArray(),
-			};
+			return ProjectDto.BuildFrom(Directory.GetProject(projectId));
 		}
 
 		[HttpGet]
