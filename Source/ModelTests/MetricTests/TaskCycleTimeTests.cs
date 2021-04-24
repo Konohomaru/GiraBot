@@ -27,7 +27,7 @@ namespace ModelTests
 			RepositoryMock
 				.Setup(directory => directory.GetProjectTasks(It.IsAny<int>()))
 				.Returns(new[] {
-					new GiraTask(0, taskCreatedTime, taskClosedTime, "task", null)
+					new GrTask(0, taskCreatedTime, taskClosedTime, "task", null)
 				});
 
 			var actualMetric = TaskCycleTime
@@ -46,7 +46,7 @@ namespace ModelTests
 			RepositoryMock
 				.Setup(directory => directory.GetProjectTasks(It.IsAny<int>()))
 				.Returns(new[] {
-					new GiraTask(0, taskCreatedTime, null, "task", null)
+					new GrTask(0, taskCreatedTime, null, "task", null)
 				});
 
 			var actualMetric = TaskCycleTime

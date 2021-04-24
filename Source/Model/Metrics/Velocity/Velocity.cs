@@ -17,7 +17,7 @@ namespace Model
 
 		public IReadOnlyCollection<VelocityNode> GetMetric(int projectId)
 		{
-			var projectLines = Repository.GetProject(projectId).GitHubSettings.Lanes;
+			var projectLanes = Repository.GetProject(projectId).GitHubSettings.Lanes;
 
 			var latestSprint = Repository
 				.GetProjectSprints(projectId)
@@ -28,13 +28,13 @@ namespace Model
 				.GetSprintTasks(latestSprint)
 				.ToArray();
 
-			return GetMetricNodes(latestSprint, projectLines, sprintTasks).ToArray();
+			return GetMetricNodes(latestSprint, projectLanes, sprintTasks).ToArray();
 		}
 
 		private IEnumerable<VelocityNode> GetMetricNodes(
 			Sprint latestSprint,
-			IReadOnlyCollection<Line> lines,
-			IReadOnlyCollection<GiraTask> sprintTasks)
+			IReadOnlyCollection<Lane> lanes,
+			IReadOnlyCollection<GrTask> sprintTasks)
 		{
 			var today = Calendar.GetCurrentUtcDateTime();
 			var iterationDay = latestSprint.BeginsAt;
@@ -42,11 +42,11 @@ namespace Model
 			while (latestSprint.ContainsDate(iterationDay) && iterationDay <= today) {
 				yield return new VelocityNode(
 					iterationDay,
-					lines.ToDictionary(
-						keySelector: line => line,
-						elementSelector: line => sprintTasks
+					lanes.ToDictionary(
+						keySelector: lane => lane,
+						elementSelector: lane => sprintTasks
 							.Where(task => task.ClosedAt <= iterationDay)
-							.Count(task => task.Labels.Contains(line.MappedAlias))));
+							.Count(task => task.Labels.Contains(lane.MappedAlias))));
 				iterationDay = iterationDay.AddDays(1);
 			}
 		}

@@ -34,7 +34,7 @@ namespace ModelTests
 
 			DirectoryMock
 				.Setup(directory => directory.GetProjectTasks(It.IsAny<int>()))
-				.Returns(new[] { new GiraTask(0, new(2021, 01, 01), null, "task", null) });
+				.Returns(new[] { new GrTask(0, new(2021, 01, 01), null, "task", null) });
 
 			var actualMetric = Burndown.GetMetric(0).Single();
 
@@ -55,8 +55,8 @@ namespace ModelTests
 			DirectoryMock
 				.Setup(directory => directory.GetProjectTasks(It.IsAny<int>()))
 				.Returns(new[] {
-					new GiraTask(0, new(2021, 01, 01), null, "task", null),
-					new GiraTask(0, new(2021, 01, 01), null, "task 2", null),
+					new GrTask(0, new(2021, 01, 01), null, "task", null),
+					new GrTask(0, new(2021, 01, 01), null, "task 2", null),
 				});
 
 			var actualMetric = Burndown.GetMetric(0).Single();
@@ -78,8 +78,8 @@ namespace ModelTests
 			DirectoryMock
 				.Setup(directory => directory.GetProjectTasks(It.IsAny<int>()))
 				.Returns(new[] {
-					new GiraTask(0, new(2021, 01, 01), null, "task", null),
-					new GiraTask(0, new(2021, 01, 01), new(2021, 01, 01), "task 2", null),
+					new GrTask(0, new(2021, 01, 01), null, "task", null),
+					new GrTask(0, new(2021, 01, 01), new(2021, 01, 01), "task 2", null),
 				});
 
 			var actualMetric = Burndown.GetMetric(0).Single();
@@ -101,8 +101,8 @@ namespace ModelTests
 			DirectoryMock
 				.Setup(directory => directory.GetProjectTasks(It.IsAny<int>()))
 				.Returns(new[] {
-					new GiraTask(0, new(2021, 01, 01), new(2021, 01, 02), "task", null),
-					new GiraTask(0, new(2021, 01, 02), new(2021, 01, 03), "task 2", null),
+					new GrTask(0, new(2021, 01, 01), new(2021, 01, 02), "task", null),
+					new GrTask(0, new(2021, 01, 02), new(2021, 01, 03), "task 2", null),
 				});
 
 			var actualMetric = Burndown.GetMetric(0);
@@ -128,8 +128,8 @@ namespace ModelTests
 			DirectoryMock
 				.Setup(directory => directory.GetProjectTasks(It.IsAny<int>()))
 				.Returns(new[] {
-					new GiraTask(0, new(2021, 01, 01), new(2021, 01, 03), "task", null),
-					new GiraTask(0, new(2021, 01, 02), new(2021, 01, 03), "task 2", null),
+					new GrTask(0, new(2021, 01, 01), new(2021, 01, 03), "task", null),
+					new GrTask(0, new(2021, 01, 02), new(2021, 01, 03), "task 2", null),
 				});
 
 			var actualMetric = Burndown.GetMetric(0);
@@ -154,7 +154,7 @@ namespace ModelTests
 
 			DirectoryMock
 				.Setup(directory => directory.GetProjectTasks(It.IsAny<int>()))
-				.Returns(Array.Empty<GiraTask>());
+				.Returns(Array.Empty<GrTask>());
 
 			var actualMetric = Burndown.GetMetric(0).Single();
 

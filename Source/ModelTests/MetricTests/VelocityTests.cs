@@ -14,7 +14,7 @@ namespace ModelTests
 
 		private Velocity Velocity { get; }
 
-		private Line[] Lanes { get; }
+		private Lane[] Lanes { get; }
 
 		public VelocityTests()
 		{
@@ -23,9 +23,9 @@ namespace ModelTests
 			Velocity = new(CalendarMock.Object, DirectoryMock.Object);
 
 			Lanes = new[] { 
-				new Line(0, "Documents", "docs"),
-				new Line(1, "Tech Debts", "tech debts"),
-				new Line(2, "Bug Fixes", "bugs")
+				new Lane(0, "Documents", "docs"),
+				new Lane(1, "Tech Debts", "tech debts"),
+				new Lane(2, "Bug Fixes", "bugs")
 			};
 
 			DirectoryMock
@@ -33,11 +33,11 @@ namespace ModelTests
 				.Returns(new Project(
 					id: 0,
 					name: "whipping-boy",
-					startSprintsAt: new(2021, 01, 01),
+					beginSprintsAt: new(2021, 01, 01),
 					gitHubSettings: new(
 						installationId: 123456, 
 						repositoryId: 123457,
-						lines: Lanes,
+						lanes: Lanes,
 						allowedProjectIds: null)));
 		}
 
@@ -55,17 +55,17 @@ namespace ModelTests
 			DirectoryMock
 				.Setup(directory => directory.GetProjectTasks(It.IsAny<int>()))
 				.Returns(new[] {
-					new GiraTask(0, new(2021, 01, 01), new(2021, 01, 01), "task", new[] { "docs" }),
-					new GiraTask(0, new(2021, 01, 01), new(2021, 01, 01), "task 2", new[] { "tech debts" }),
-					new GiraTask(0, new(2021, 01, 01), new(2021, 01, 01), "task 3", new[] { "bugs" }),
+					new GrTask(0, new(2021, 01, 01), new(2021, 01, 01), "task", new[] { "docs" }),
+					new GrTask(0, new(2021, 01, 01), new(2021, 01, 01), "task 2", new[] { "tech debts" }),
+					new GrTask(0, new(2021, 01, 01), new(2021, 01, 01), "task 3", new[] { "bugs" }),
 				});
 
 			var actualMetric = Velocity.GetMetric(0).Single();
 
-			Assert.Equal(3, actualMetric.ClosetTasksByLane.Count);
-			Assert.Equal(1, actualMetric.ClosetTasksByLane[Lanes[0]]);
-			Assert.Equal(1, actualMetric.ClosetTasksByLane[Lanes[1]]);
-			Assert.Equal(1, actualMetric.ClosetTasksByLane[Lanes[2]]);
+			Assert.Equal(3, actualMetric.ClosedTasksByLane.Count);
+			Assert.Equal(1, actualMetric.ClosedTasksByLane[Lanes[0]]);
+			Assert.Equal(1, actualMetric.ClosedTasksByLane[Lanes[1]]);
+			Assert.Equal(1, actualMetric.ClosedTasksByLane[Lanes[2]]);
 		}
 
 		[Fact]
@@ -82,15 +82,15 @@ namespace ModelTests
 			DirectoryMock
 				.Setup(directory => directory.GetProjectTasks(It.IsAny<int>()))
 				.Returns(new[] {
-					new GiraTask(0, new(2021, 01, 01), new(2021, 01, 01), "task", new[] { "docs" })
+					new GrTask(0, new(2021, 01, 01), new(2021, 01, 01), "task", new[] { "docs" })
 				});
 
 			var actualMetric = Velocity.GetMetric(0).Single();
 
-			Assert.Equal(3, actualMetric.ClosetTasksByLane.Count);
-			Assert.Equal(1, actualMetric.ClosetTasksByLane[Lanes[0]]);
-			Assert.Equal(0, actualMetric.ClosetTasksByLane[Lanes[1]]);
-			Assert.Equal(0, actualMetric.ClosetTasksByLane[Lanes[2]]);
+			Assert.Equal(3, actualMetric.ClosedTasksByLane.Count);
+			Assert.Equal(1, actualMetric.ClosedTasksByLane[Lanes[0]]);
+			Assert.Equal(0, actualMetric.ClosedTasksByLane[Lanes[1]]);
+			Assert.Equal(0, actualMetric.ClosedTasksByLane[Lanes[2]]);
 		}
 
 		[Fact]
@@ -106,14 +106,14 @@ namespace ModelTests
 
 			DirectoryMock
 				.Setup(directory => directory.GetProjectTasks(It.IsAny<int>()))
-				.Returns(Array.Empty<GiraTask>());
+				.Returns(Array.Empty<GrTask>());
 
 			var actualMetric = Velocity.GetMetric(0).Single();
 
-			Assert.Equal(3, actualMetric.ClosetTasksByLane.Count);
-			Assert.Equal(0, actualMetric.ClosetTasksByLane[Lanes[0]]);
-			Assert.Equal(0, actualMetric.ClosetTasksByLane[Lanes[1]]);
-			Assert.Equal(0, actualMetric.ClosetTasksByLane[Lanes[2]]);
+			Assert.Equal(3, actualMetric.ClosedTasksByLane.Count);
+			Assert.Equal(0, actualMetric.ClosedTasksByLane[Lanes[0]]);
+			Assert.Equal(0, actualMetric.ClosedTasksByLane[Lanes[1]]);
+			Assert.Equal(0, actualMetric.ClosedTasksByLane[Lanes[2]]);
 		}
 
 		[Fact]
@@ -130,23 +130,23 @@ namespace ModelTests
 			DirectoryMock
 				.Setup(directory => directory.GetProjectTasks(It.IsAny<int>()))
 				.Returns(new[] {
-					new GiraTask(0, new(2021, 01, 01), new(2021, 01, 01), "task", new[] { "docs" }),
-					new GiraTask(0, new(2021, 01, 01), new(2021, 01, 02), "task 2", new[] { "docs" }),
-					new GiraTask(0, new(2021, 01, 01), new(2021, 01, 01), "task 3", new[] { "tech debts" }),
-					new GiraTask(0, new(2021, 01, 01), new(2021, 01, 02), "task 4", new[] { "tech debts" }),
-					new GiraTask(0, new(2021, 01, 01), new(2021, 01, 01), "task 5", new[] { "bugs" }),
-					new GiraTask(0, new(2021, 01, 01), new(2021, 01, 02), "task 6", new[] { "bugs" }),
+					new GrTask(0, new(2021, 01, 01), new(2021, 01, 01), "task", new[] { "docs" }),
+					new GrTask(0, new(2021, 01, 01), new(2021, 01, 02), "task 2", new[] { "docs" }),
+					new GrTask(0, new(2021, 01, 01), new(2021, 01, 01), "task 3", new[] { "tech debts" }),
+					new GrTask(0, new(2021, 01, 01), new(2021, 01, 02), "task 4", new[] { "tech debts" }),
+					new GrTask(0, new(2021, 01, 01), new(2021, 01, 01), "task 5", new[] { "bugs" }),
+					new GrTask(0, new(2021, 01, 01), new(2021, 01, 02), "task 6", new[] { "bugs" }),
 				});
 
 			var actualMetric = Velocity.GetMetric(0);
 
-			Assert.Equal(3, actualMetric.ElementAt(0).ClosetTasksByLane.Count);
-			Assert.Equal(1, actualMetric.ElementAt(0).ClosetTasksByLane[Lanes[0]]);
-			Assert.Equal(1, actualMetric.ElementAt(0).ClosetTasksByLane[Lanes[1]]);
-			Assert.Equal(1, actualMetric.ElementAt(0).ClosetTasksByLane[Lanes[2]]);
-			Assert.Equal(2, actualMetric.ElementAt(1).ClosetTasksByLane[Lanes[0]]);
-			Assert.Equal(2, actualMetric.ElementAt(1).ClosetTasksByLane[Lanes[1]]);
-			Assert.Equal(2, actualMetric.ElementAt(1).ClosetTasksByLane[Lanes[2]]);
+			Assert.Equal(3, actualMetric.ElementAt(0).ClosedTasksByLane.Count);
+			Assert.Equal(1, actualMetric.ElementAt(0).ClosedTasksByLane[Lanes[0]]);
+			Assert.Equal(1, actualMetric.ElementAt(0).ClosedTasksByLane[Lanes[1]]);
+			Assert.Equal(1, actualMetric.ElementAt(0).ClosedTasksByLane[Lanes[2]]);
+			Assert.Equal(2, actualMetric.ElementAt(1).ClosedTasksByLane[Lanes[0]]);
+			Assert.Equal(2, actualMetric.ElementAt(1).ClosedTasksByLane[Lanes[1]]);
+			Assert.Equal(2, actualMetric.ElementAt(1).ClosedTasksByLane[Lanes[2]]);
 		}
 	}
 }

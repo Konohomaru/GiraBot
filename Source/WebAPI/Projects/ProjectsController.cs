@@ -10,7 +10,7 @@ namespace WebAPI
 	[Route("[controller]")]
 	public class ProjectsController : Controller
 	{
-		private IProjectsRepository Directory { get; }
+		private IProjectsRepository Repository { get; }
 
 		private Burndown Burndown { get; }
 
@@ -24,7 +24,7 @@ namespace WebAPI
 			Velocity velocity,
 			TaskCycleTime taskCycleTime)
 		{
-			Directory = directory;
+			Repository = directory;
 			Burndown = burndown;
 			Velocity = velocity;
 			TaskCycleTime = taskCycleTime;
@@ -32,24 +32,18 @@ namespace WebAPI
 
 		[HttpGet]
 		[Route("{projectId}")]
-		public ProjectDto GetGiraProject(int projectId)
+		public ProjectDto GetProject(int projectId)
 		{
-			return ProjectDto.BuildFrom(Directory.GetProject(projectId));
+			return ProjectDto.BuildFrom(Repository.GetProject(projectId));
 		}
 
 		[HttpGet]
 		[Route("{projectId}/tasks")]
-		public GiraTaskDto[] GetGiraProjectTasks(int projectId)
+		public GrTaskDto[] GetProjectTasks(int projectId)
 		{
-			return Directory
+			return Repository
 				.GetProjectTasks(projectId)
-				.Select(giraTask => new GiraTaskDto {
-					Id = giraTask.Id,
-					ClosedAt = giraTask.ClosedAt,
-					CreatedAt = giraTask.CreatedAt,
-					Title = giraTask.Title,
-					Labels = giraTask.Labels.ToArray()
-				})
+				.Select(giraTask => GrTaskDto.BuildFrom(giraTask))
 				.ToArray();
 		}
 
@@ -57,13 +51,9 @@ namespace WebAPI
 		[Route("{projectId}/sprints")]
 		public SprintDto[] GetProjectSprints(int projectId)
 		{
-			return Directory
+			return Repository
 				.GetProjectSprints(projectId)
-				.Select(sprint => new SprintDto {
-					Id = sprint.Id,
-					BeginAt = sprint.BeginsAt,
-					Duration = sprint.DaysCount
-				})
+				.Select(sprint => SprintDto.BuildFrom(sprint))
 				.ToArray();
 		}
 
@@ -73,10 +63,7 @@ namespace WebAPI
 		{
 			return Burndown
 				.GetMetric(projectId)
-				.Select(node => new BurndownNodeDto {
-					Day = node.Day,
-					RemainingTasks = node.RemainingTasks
-				})
+				.Select(node => BurndownNodeDto.BuildFrom(node))
 				.ToArray();
 		}
 

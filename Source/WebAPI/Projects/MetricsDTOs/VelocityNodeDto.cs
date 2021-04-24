@@ -6,16 +6,18 @@ namespace WebAPI
 {
 	public class VelocityNodeDto
 	{
-		public DateTime SprintDay { get; set; }
+		public DateTime Day { get; set; }
 
-		public VelocityLaneDto[] IssuesByLane { get; set; }
+		public VelocityLaneDto[] ClosedTasksByLane { get; set; }
 
 		public static VelocityNodeDto BuildFrom(VelocityNode node)
 		{
 			return new VelocityNodeDto {
-				SprintDay = node.Day,
-				IssuesByLane = node.ClosetTasksByLane
-					.Select(item => VelocityLaneDto.BuildFrom(LaneDto.BuildFrom(item.Key), item.Value))
+				Day = node.Day,
+				ClosedTasksByLane = node.ClosedTasksByLane
+					.Select(item => VelocityLaneDto.BuildFrom(
+						lane: LaneDto.BuildFrom(item.Key),
+						taskCount: item.Value))
 					.ToArray()
 			};
 		}

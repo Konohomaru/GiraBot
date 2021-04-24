@@ -26,7 +26,7 @@ namespace WebAPI
 				Name = project.Name,
 				InstallationId = project.GitHubSettings.InstallationId,
 				RepositoryId = project.GitHubSettings.RepositoryId,
-				SprintDurationDays = project.SprtinDurationDays,
+				SprintDurationDays = project.SprintLength,
 				Lanes = project.GitHubSettings.Lanes
 					.Select(lane =>
 						new LaneDto {

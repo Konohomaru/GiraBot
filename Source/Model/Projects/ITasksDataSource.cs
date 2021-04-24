@@ -4,6 +4,6 @@ namespace Model
 {
 	public interface ITasksDataSource
 	{
-		IReadOnlyCollection<GiraTask> GetProjectTasks(Project project);
+		IReadOnlyCollection<GrTask> GetProjectTasks(Project project);
 	}
 }

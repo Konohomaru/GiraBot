@@ -1,28 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Model
+namespace Integrations
 {
-	public class TaskCycleTimeNode
+	public class Issue
 	{
-		public string Title { get; }
+		public int Id { get; }
 
 		public DateTime CreatedAt { get; }
 
 		public DateTime? ClosedAt { get; }
 
+		public string Title { get; }
+
 		public IReadOnlyCollection<string> Labels { get; }
 
-		public TaskCycleTimeNode(
-			string title,
+		public IReadOnlyCollection<int> ProjectIds { get; }
+
+		public Issue(
+			int id,
 			DateTime createdAt,
 			DateTime? closedAt,
-			string[] labels)
+			string title,
+			string[] labels,
+			int[] projectIds)
 		{
-			Title = title;
+			Id = id;
 			CreatedAt = createdAt;
 			ClosedAt = closedAt;
+			Title = title;
 			Labels = labels;
+			ProjectIds = projectIds;
 		}
 	}
 }

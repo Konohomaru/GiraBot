@@ -21,11 +21,13 @@ namespace Model
 			return false;
 		}
 
-		public static IEnumerable<GiraTask> GetSprintTasks(this IEnumerable<GiraTask> tasks, Sprint sprint)
+		public static IEnumerable<GrTask> GetSprintTasks(
+			this IEnumerable<GrTask> tasks,
+			Sprint sprint)
 		{
-			return tasks
-				.Where(task => !task.ClosedAt.HasValue || task.ClosedAt >= sprint.BeginsAt)
-				.ToArray();
+			return tasks.Where(task =>
+				!task.ClosedAt.HasValue ||
+				task.ClosedAt >= sprint.BeginsAt);
 		}
 	}
 }

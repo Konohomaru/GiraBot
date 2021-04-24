@@ -1,3 +1,4 @@
+using Integrations;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -22,7 +23,7 @@ namespace WebAPI
 		{
 			services.AddControllers();
 			services.AddHealthChecks();
-			services.AddGiraModel(new GitHubTasksDataSource(new GiraGitHubFacade(Configuration["Pem"])));
+			services.AddGiraModel(new GitHubTasksDataSource(new GitHubFacade(Configuration["Pem"])));
 			services
 				.AddAuthentication("BasicAuthentication")
 				.AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);

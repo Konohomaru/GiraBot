@@ -29,7 +29,7 @@ namespace Model
 			return GetMetricNodes(latestSprint, sprintTasks).ToArray();
 		}
 
-		private IEnumerable<BurndownNode> GetMetricNodes(Sprint latestSprint, IReadOnlyCollection<GiraTask> sprintTasks)
+		private IEnumerable<BurndownNode> GetMetricNodes(Sprint latestSprint, IReadOnlyCollection<GrTask> sprintTasks)
 		{
 			var today = Calendar.GetCurrentUtcDateTime();
 			var iterationDay = latestSprint.BeginsAt;
@@ -37,9 +37,8 @@ namespace Model
 			while (latestSprint.ContainsDate(iterationDay) && iterationDay <= today) {
 				yield return new BurndownNode(
 					iterationDay,
-					sprintTasks.Count(task =>
-						task.CreatedAt <= iterationDay &&
-						(!task.ClosedAt.HasValue || task.ClosedAt > iterationDay)));
+					sprintTasks.Count(task => !task.ClosedAt.HasValue || task.ClosedAt > iterationDay));
+
 				iterationDay = iterationDay.AddDays(1);
 			}
 		}

@@ -19,14 +19,14 @@ namespace Model
 			return new Project(
 				id: 0,
 				name: "mindbox-moscow/issues-devx",
-				startSprintsAt: new(2021, 01, 01),
+				beginSprintsAt: new(2021, 01, 01),
 				gitHubSettings: new GitHubSettings(
 					installationId: 15161810,
 					repositoryId: 229932826,
-					lines: new[] {
-						new Line(0, "Bugs", "bug"),
-						new Line(1, "Tech Debts", "tech debt"),
-						new Line(2, "Road Map", "road map")
+					lanes: new[] {
+						new Lane(0, "Bugs", "bug"),
+						new Lane(1, "Tech Debts", "tech debt"),
+						new Lane(2, "Road Map", "road map")
 					},
 					allowedProjectIds: new[] { 3720514 }));
 		}
@@ -42,13 +42,13 @@ namespace Model
 				yield return new Sprint(
 					id: iterationSprntBeginingDay.DayOfYear,
 					beginAt: iterationSprntBeginingDay,
-					durationDays: giraProject.SprtinDurationDays);
+					length: giraProject.SprintLength);
 
-				iterationSprntBeginingDay = iterationSprntBeginingDay.AddDays(giraProject.SprtinDurationDays);
+				iterationSprntBeginingDay = iterationSprntBeginingDay.AddDays(giraProject.SprintLength);
 			}
 		}
 
-		public IReadOnlyCollection<GiraTask> GetProjectTasks(int projectId)
+		public IReadOnlyCollection<GrTask> GetProjectTasks(int projectId)
 		{
 			return TasksDataSource.GetProjectTasks(GetProject(projectId));
 		}
