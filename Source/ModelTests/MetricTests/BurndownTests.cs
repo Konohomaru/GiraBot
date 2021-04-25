@@ -4,162 +4,124 @@ using System;
 using System.Linq;
 using Xunit;
 
+using static Moq.It;
+using static Xunit.Assert;
+
 namespace ModelTests
 {
 	public class BurndownTests
 	{
 		private Mock<ICalendar> CalendarMock { get; }
 
-		private Mock<IProjectsRepository> DirectoryMock { get; }
+		private Mock<IProjectsRepository> RepositoryMock { get; }
 
 		private Burndown Burndown { get; }
 
 		public BurndownTests()
 		{
 			CalendarMock = new();
-			DirectoryMock = new();
-			Burndown = new(CalendarMock.Object, DirectoryMock.Object);
+			RepositoryMock = new();
+			Burndown = new(CalendarMock.Object, RepositoryMock.Object);
+
+			RepositoryMock
+				.Setup(repository => repository.GetProjectSprints(1))
+				.Returns(new[] { new Sprint(0, new(), 7) });
 		}
 
 		[Fact]
-		public void GetMetric_OneOpenedTask_OneRemainedTask()
+		public void ArgumentNullExceptionIfSprtinsIsNull()
 		{
-			CalendarMock
-				.Setup(calendar => calendar.GetCurrentUtcDateTime())
-				.Returns(new DateTime(2021, 01, 01));
+			RepositoryMock
+				.Setup(repository => repository.GetProjectSprints(IsAny<int>()))
+				.Returns(value: null);
 
-			DirectoryMock
-				.Setup(directory => directory.GetProjectSprints(It.IsAny<int>()))
-				.Returns(new[] { new Sprint(0, new(2021, 01, 01), 7) });
-
-			DirectoryMock
-				.Setup(directory => directory.GetProjectTasks(It.IsAny<int>()))
-				.Returns(new[] { new GrTask(0, new(2021, 01, 01), null, "task", null) });
-
-			var actualMetric = Burndown.GetMetric(0).Single();
-
-			Assert.Equal(1, actualMetric.RemainingTasks);
+			Throws<ArgumentNullException>(() => Burndown.GetMetric(0));
 		}
 
 		[Fact]
-		public void GetMetric_TwoOpenedTasks_TwoRemainingTasks()
+		public void ArgumentNullExceptionIfTasksIsNull()
 		{
-			CalendarMock
-				.Setup(calendar => calendar.GetCurrentUtcDateTime())
-				.Returns(new DateTime(2021, 01, 01));
+			RepositoryMock
+				.Setup(repository => repository.GetProjectTasks(IsAny<int>()))
+				.Returns(value: null);
 
-			DirectoryMock
-				.Setup(directory => directory.GetProjectSprints(It.IsAny<int>()))
-				.Returns(new[] { new Sprint(0, new(2021, 01, 01), 7) });
+			Throws<ArgumentNullException>(() => Burndown.GetMetric(1));
+		}
+		
+		[Fact]
+		public void InvalidOperationExceptionIfNoSprints()
+		{
+			RepositoryMock
+				.Setup(repository => repository.GetProjectSprints(IsAny<int>()))
+				.Returns(Array.Empty<Sprint>());
 
-			DirectoryMock
-				.Setup(directory => directory.GetProjectTasks(It.IsAny<int>()))
-				.Returns(new[] {
-					new GrTask(0, new(2021, 01, 01), null, "task", null),
-					new GrTask(0, new(2021, 01, 01), null, "task 2", null),
-				});
-
-			var actualMetric = Burndown.GetMetric(0).Single();
-
-			Assert.Equal(2, actualMetric.RemainingTasks);
+			Throws<InvalidOperationException>(() => Burndown.GetMetric(0));
 		}
 
 		[Fact]
-		public void GetMetric_OpenedAndClosedTasks_OneRemainingTask()
+		public void NoRemainingTasksIfNoTasks()
 		{
-			CalendarMock
-				.Setup(calendar => calendar.GetCurrentUtcDateTime())
-				.Returns(new DateTime(2021, 01, 01));
-
-			DirectoryMock
-				.Setup(directory => directory.GetProjectSprints(It.IsAny<int>()))
-				.Returns(new[] { new Sprint(0, new(2021, 01, 01), 7) });
-
-			DirectoryMock
-				.Setup(directory => directory.GetProjectTasks(It.IsAny<int>()))
-				.Returns(new[] {
-					new GrTask(0, new(2021, 01, 01), null, "task", null),
-					new GrTask(0, new(2021, 01, 01), new(2021, 01, 01), "task 2", null),
-				});
-
-			var actualMetric = Burndown.GetMetric(0).Single();
-
-			Assert.Equal(1, actualMetric.RemainingTasks);
-		}
-
-		[Fact]
-		public void GetMetric_OpenedAndClosedTasksInDefferentDays_OneRemainingTaskInEachDay()
-		{
-			CalendarMock
-				.Setup(calendar => calendar.GetCurrentUtcDateTime())
-				.Returns(new DateTime(2021, 01, 02));
-
-			DirectoryMock
-				.Setup(directory => directory.GetProjectSprints(It.IsAny<int>()))
-				.Returns(new[] { new Sprint(0, new(2021, 01, 01), 7) });
-
-			DirectoryMock
-				.Setup(directory => directory.GetProjectTasks(It.IsAny<int>()))
-				.Returns(new[] {
-					new GrTask(0, new(2021, 01, 01), new(2021, 01, 02), "task", null),
-					new GrTask(0, new(2021, 01, 02), new(2021, 01, 03), "task 2", null),
-				});
-
-			var actualMetric = Burndown.GetMetric(0);
-
-			Assert.Equal(2, actualMetric.Count);
-			Assert.Equal(new(2021, 01, 01), actualMetric.ElementAt(0).Day);
-			Assert.Equal(1, actualMetric.ElementAt(0).RemainingTasks);
-			Assert.Equal(new(2021, 01, 02), actualMetric.ElementAt(1).Day);
-			Assert.Equal(1, actualMetric.ElementAt(1).RemainingTasks);
-		}
-
-		[Fact]
-		public void GetMetric_TwoOpenedTasks_OneAndTwoRemainingTasks()
-		{
-			CalendarMock
-				.Setup(calendar => calendar.GetCurrentUtcDateTime())
-				.Returns(new DateTime(2021, 01, 02));
-
-			DirectoryMock
-				.Setup(directory => directory.GetProjectSprints(It.IsAny<int>()))
-				.Returns(new[] { new Sprint(0, new(2021, 01, 01), 7) });
-
-			DirectoryMock
-				.Setup(directory => directory.GetProjectTasks(It.IsAny<int>()))
-				.Returns(new[] {
-					new GrTask(0, new(2021, 01, 01), new(2021, 01, 03), "task", null),
-					new GrTask(0, new(2021, 01, 02), new(2021, 01, 03), "task 2", null),
-				});
-
-			var actualMetric = Burndown.GetMetric(0);
-
-			Assert.Equal(2, actualMetric.Count);
-			Assert.Equal(new(2021, 01, 01), actualMetric.ElementAt(0).Day);
-			Assert.Equal(1, actualMetric.ElementAt(0).RemainingTasks);
-			Assert.Equal(new(2021, 01, 02), actualMetric.ElementAt(1).Day);
-			Assert.Equal(2, actualMetric.ElementAt(1).RemainingTasks);
-		}
-
-		[Fact]
-		public void GetMetrix_NoTasks_NoRemainingTasks()
-		{
-			CalendarMock
-				.Setup(calendar => calendar.GetCurrentUtcDateTime())
-				.Returns(new DateTime(2021, 01, 01));
-
-			DirectoryMock
-				.Setup(directory => directory.GetProjectSprints(It.IsAny<int>()))
-				.Returns(new[] { new Sprint(0, new(2021, 01, 01), 7) });
-
-			DirectoryMock
-				.Setup(directory => directory.GetProjectTasks(It.IsAny<int>()))
+			RepositoryMock
+				.Setup(repository => repository.GetProjectTasks(IsAny<int>()))
 				.Returns(Array.Empty<GrTask>());
 
-			var actualMetric = Burndown.GetMetric(0).Single();
+			var metric = Burndown.GetMetric(1).Single();
 
-			Assert.Equal(new(2021, 01, 01), actualMetric.Day);
-			Assert.Equal(0, actualMetric.RemainingTasks);
+			Equal(new(), metric.Day);
+			Equal(0, metric.RemainingTasks);
+		}
+
+		[Fact]
+		public void OneRemainingTaskIfOneOpenedTask()
+		{
+			RepositoryMock
+				.Setup(repository => repository.GetProjectTasks(IsAny<int>()))
+				.Returns(new[] { new GrTaskBuilder().Build() });
+
+			var metric = Burndown.GetMetric(1).Single();
+
+			Equal(new(), metric.Day);
+			Equal(1, metric.RemainingTasks);
+		}
+
+		[Fact]
+		public void NoRemainingTasksIfOneClosedTask()
+		{
+			RepositoryMock
+				.Setup(repository => repository.GetProjectTasks(IsAny<int>()))
+				.Returns(new[] {
+					new GrTaskBuilder()
+						.ClosedAt(new())
+						.Build()
+				});
+
+			var metric = Burndown.GetMetric(1).Single();
+
+			Equal(new(), metric.Day);
+			Equal(0, metric.RemainingTasks);
+		}
+
+		[Fact]
+		public void OneRemainingTaskForTwoDaysIfItWasClosedOnThirdDay()
+		{
+			CalendarMock
+				.Setup(calendar => calendar.GetCurrentUtcDateTime())
+				.Returns(new DateTime().AddDays(2));
+
+			RepositoryMock
+				.Setup(repository => repository.GetProjectTasks(IsAny<int>()))
+				.Returns(new[] {
+					new GrTaskBuilder()
+						.ClosedAt(new DateTime().AddDays(2))
+						.Build()
+				});
+
+			var metric = Burndown.GetMetric(1);
+
+			Equal(3, metric.Count);
+			Equal(1, metric.ElementAt(0).RemainingTasks);
+			Equal(1, metric.ElementAt(1).RemainingTasks);
+			Equal(0, metric.ElementAt(2).RemainingTasks);
 		}
 	}
 }
