@@ -6,6 +6,11 @@ namespace ModelTests
 {
 	public class GrTaskBuilder : EntityBuilder<GrTask, GrTaskBuilder>
 	{
+		public GrTaskBuilder WithId(int id)
+		{
+			return SetValue(task => task.Id, id);
+		}
+
 		public GrTaskBuilder ClosedAt(DateTime closedAt)
 		{
 			return SetValue(task => task.ClosedAt, closedAt);
@@ -26,7 +31,7 @@ namespace ModelTests
 		public override GrTask Build()
 		{
 			return new GrTask(
-				id: default,
+				id: GetValue(task => task.Id),
 				createdAt: default,
 				closedAt: GetValue(task => task.ClosedAt),
 				title: default,
