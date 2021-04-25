@@ -4,13 +4,17 @@ using System;
 using System.Linq;
 using Xunit;
 
+using static Moq.It;
+using static Xunit.Assert;
+
+
 namespace ModelTests
 {
 	public class VelocityTests
 	{
 		private Mock<ICalendar> CalendarMock { get; }
 
-		private Mock<IProjectsRepository> DirectoryMock { get; }
+		private Mock<IProjectsRepository> RepositoryMock { get; }
 
 		private Velocity Velocity { get; }
 
@@ -19,8 +23,8 @@ namespace ModelTests
 		public VelocityTests()
 		{
 			CalendarMock = new();
-			DirectoryMock = new();
-			Velocity = new(CalendarMock.Object, DirectoryMock.Object);
+			RepositoryMock = new();
+			Velocity = new(CalendarMock.Object, RepositoryMock.Object);
 
 			Lanes = new[] { 
 				new Lane(0, "Documents", "docs"),
@@ -28,8 +32,8 @@ namespace ModelTests
 				new Lane(2, "Bug Fixes", "bugs")
 			};
 
-			DirectoryMock
-				.Setup(directory => directory.GetProject(0))
+			RepositoryMock
+				.Setup(repository => repository.GetProject(1))
 				.Returns(new Project(
 					id: 0,
 					name: "whipping-boy",
@@ -39,6 +43,67 @@ namespace ModelTests
 						repositoryId: 123457,
 						lanes: Lanes,
 						allowedProjectIds: null)));
+
+			RepositoryMock
+				.Setup(repository => repository.GetProjectSprints(1))
+				.Returns(new[] { new Sprint(0, new(), 7) });
+		}
+
+		[Fact]
+		public void ThreeLanesForOneDayIfSprintHasOneDay()
+		{
+			RepositoryMock
+				.Setup(repository => repository.GetProjectTasks(IsAny<int>()))
+				.Returns(Array.Empty<GrTask>());
+
+			var metric = Velocity.GetMetric(1).Single();
+
+			Equal(new(), metric.Day);
+			Equal(3, metric.ClosedTasksByLane.Count);
+			Equal(0, metric.ClosedTasksByLane[Lanes[0]]);
+			Equal(0, metric.ClosedTasksByLane[Lanes[1]]);
+			Equal(0, metric.ClosedTasksByLane[Lanes[2]]);
+		}
+
+		[Fact]
+		public void NoClosedTasksIfTaskIsOpen()
+		{
+			RepositoryMock
+				.Setup(repository => repository.GetProjectTasks(IsAny<int>()))
+				.Returns(new[] {
+					new GrTaskBuilder()
+						.ClosedAt(new DateTime().AddDays(1))
+						.Build()
+				});
+
+			var metric = Velocity.GetMetric(1).Single();
+
+			Equal(new(), metric.Day);
+			Equal(3, metric.ClosedTasksByLane.Count);
+			Equal(0, metric.ClosedTasksByLane[Lanes[0]]);
+			Equal(0, metric.ClosedTasksByLane[Lanes[1]]);
+			Equal(0, metric.ClosedTasksByLane[Lanes[2]]);
+		}
+
+		[Fact]
+		public void OneClosedTaskByLaneIfTaskIsClosed()
+		{
+			RepositoryMock
+				.Setup(repository => repository.GetProjectTasks(IsAny<int>()))
+				.Returns(new[] {
+					new GrTaskBuilder()
+						.ClosedAt(new DateTime())
+						.WithLabel(Lanes[0].MappedAlias)
+						.Build()
+				});
+
+			var metric = Velocity.GetMetric(1).Single();
+
+			Equal(new(), metric.Day);
+			Equal(3, metric.ClosedTasksByLane.Count);
+			Equal(1, metric.ClosedTasksByLane[Lanes[0]]);
+			Equal(0, metric.ClosedTasksByLane[Lanes[1]]);
+			Equal(0, metric.ClosedTasksByLane[Lanes[2]]);
 		}
 	}
 }
