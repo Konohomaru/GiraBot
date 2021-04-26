@@ -8,6 +8,6 @@ namespace Model
 
 		IEnumerable<Sprint> GetProjectSprints(int projectId);
 
-		IReadOnlyCollection<GrTask> GetProjectTasks(int projectId);
+		IReadOnlyCollection<Card> GetProjectCards(int projectId);
 	}
 }

@@ -15,7 +15,7 @@ namespace WebAPI
 
 		public long RepositoryId { get; set; }
 
-		public LaneDto[] Lanes { get; set; }
+		public SwimlaneDto[] Swimlanes { get; set; }
 
 		public int[] AllowedGitHubProjectIds { get; set; }
 
@@ -27,11 +27,11 @@ namespace WebAPI
 				InstallationId = project.GitHubSettings.InstallationId,
 				RepositoryId = project.GitHubSettings.RepositoryId,
 				SprintDurationDays = project.SprintLength,
-				Lanes = project.GitHubSettings.Lanes
+				Swimlanes = project.GitHubSettings.Swimlanes
 					.Select(lane =>
-						new LaneDto {
+						new SwimlaneDto {
 							Name = lane.Name,
-							MappedLabelName = lane.MappedAlias
+							MappedAlias = lane.MappedAlias
 						})
 					.ToArray(),
 				AllowedGitHubProjectIds = project.GitHubSettings.AllowedProjectIds.ToArray(),

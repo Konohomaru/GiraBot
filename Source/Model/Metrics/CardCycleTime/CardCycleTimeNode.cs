@@ -3,30 +3,26 @@ using System.Collections.Generic;
 
 namespace Model
 {
-	public class GrTask
+	public class CardCycleTimeNode
 	{
-		public int Id { get; }
+		public string Title { get; }
 
 		public DateTime CreatedAt { get; }
 
 		public DateTime? ClosedAt { get; }
 
-		public string Title { get; }
-
 		public IReadOnlyCollection<string> Labels { get; }
 
-		public GrTask(
-			int id,
+		public CardCycleTimeNode(
+			string title,
 			DateTime createdAt,
 			DateTime? closedAt,
-			string title,
-			IReadOnlyCollection<string> labels)
+			string[] labels)
 		{
-			Id = id;
+			Title = title;
 			CreatedAt = createdAt;
 			ClosedAt = closedAt;
-			Title = title;
-			Labels = labels ?? Array.Empty<string>();
+			Labels = labels;
 		}
 	}
 }

@@ -6,12 +6,12 @@ namespace Model
 	{
 		public DateTime Day { get; }
 
-		public int RemainingTasks { get; }
+		public int RemainingCards { get; }
 
-		public BurndownNode(DateTime day, int remainingTasks)
+		public BurndownNode(DateTime day, int remainingCards)
 		{
 			Day = day;
-			RemainingTasks = remainingTasks;
+			RemainingCards = remainingCards;
 		}
 	}
 }

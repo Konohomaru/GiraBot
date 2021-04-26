@@ -16,13 +16,13 @@ namespace WebAPI
 
 		private Velocity Velocity { get; }
 
-		private TaskCycleTime TaskCycleTime { get; }
+		private CardCycleTime TaskCycleTime { get; }
 
 		public ProjectsController(
 			IProjectsRepository directory,
 			Burndown burndown,
 			Velocity velocity,
-			TaskCycleTime taskCycleTime)
+			CardCycleTime taskCycleTime)
 		{
 			Repository = directory;
 			Burndown = burndown;
@@ -39,11 +39,11 @@ namespace WebAPI
 
 		[HttpGet]
 		[Route("{projectId}/tasks")]
-		public GrTaskDto[] GetProjectTasks(int projectId)
+		public CardDto[] GetProjectTasks(int projectId)
 		{
 			return Repository
-				.GetProjectTasks(projectId)
-				.Select(giraTask => GrTaskDto.BuildFrom(giraTask))
+				.GetProjectCards(projectId)
+				.Select(giraTask => CardDto.BuildFrom(giraTask))
 				.ToArray();
 		}
 
@@ -79,11 +79,11 @@ namespace WebAPI
 
 		[HttpGet]
 		[Route("{projectId}/taskcycletime")]
-		public TaskCycleTimeNodeDto[] GetTaskCycleTimeMetric(int projectId)
+		public CardCycleTimeNodeDto[] GetTaskCycleTimeMetric(int projectId)
 		{
 			return TaskCycleTime
 				.GetMetric(projectId)
-				.Select(node => TaskCycleTimeNodeDto.BuildFrom(node))
+				.Select(node => CardCycleTimeNodeDto.BuildFrom(node))
 				.ToArray();
 		}
 	}

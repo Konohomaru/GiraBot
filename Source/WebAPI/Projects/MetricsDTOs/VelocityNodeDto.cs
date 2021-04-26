@@ -8,16 +8,16 @@ namespace WebAPI
 	{
 		public DateTime Day { get; set; }
 
-		public VelocityLaneDto[] ClosedTasksByLane { get; set; }
+		public VelocitySwimlaneDto[] ClosedCards { get; set; }
 
 		public static VelocityNodeDto BuildFrom(VelocityNode node)
 		{
 			return new VelocityNodeDto {
 				Day = node.Day,
-				ClosedTasksByLane = node.ClosedTasksByLane
-					.Select(item => VelocityLaneDto.BuildFrom(
-						lane: LaneDto.BuildFrom(item.Key),
-						taskCount: item.Value))
+				ClosedCards = node.ClosedCards
+					.Select(item => VelocitySwimlaneDto.BuildFrom(
+						lane: SwimlaneDto.BuildFrom(item.Key),
+						cardCount: item.Value))
 					.ToArray()
 			};
 		}

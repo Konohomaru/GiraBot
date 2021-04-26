@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace WebAPI
 {
-	public class GrTaskDto
+	public class CardDto
 	{
 		public int Id { get; set; }
 
@@ -16,9 +16,9 @@ namespace WebAPI
 
 		public string[] Labels { get; set; }
 
-		public static GrTaskDto BuildFrom(GrTask giraTask)
+		public static CardDto BuildFrom(Card giraTask)
 		{
-			return new GrTaskDto {
+			return new CardDto {
 				Id = giraTask.Id,
 				CreatedAt = giraTask.CreatedAt,
 				ClosedAt = giraTask.ClosedAt,

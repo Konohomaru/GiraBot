@@ -4,19 +4,19 @@ using System.Linq;
 
 namespace ModelTests
 {
-	public class GrTaskBuilder : EntityBuilder<GrTask, GrTaskBuilder>
+	public class CardBuilder : EntityBuilder<Card, CardBuilder>
 	{
-		public GrTaskBuilder WithId(int id)
+		public CardBuilder WithId(int id)
 		{
 			return SetValue(task => task.Id, id);
 		}
 
-		public GrTaskBuilder ClosedAt(DateTime closedAt)
+		public CardBuilder ClosedAt(DateTime closedAt)
 		{
 			return SetValue(task => task.ClosedAt, closedAt);
 		}
 
-		public GrTaskBuilder WithLabel(string label)
+		public CardBuilder WithLabel(string label)
 		{
 			var labels = GetValue(
 				accessor: task => task.Labels,
@@ -28,9 +28,9 @@ namespace ModelTests
 			return SetValue(task => task.Labels, labels.ToArray());
 		}
 
-		public override GrTask Build()
+		public override Card Build()
 		{
-			return new GrTask(
+			return new Card(
 				id: GetValue(task => task.Id),
 				createdAt: default,
 				closedAt: GetValue(task => task.ClosedAt),

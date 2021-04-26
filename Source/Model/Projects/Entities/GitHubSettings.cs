@@ -8,19 +8,19 @@ namespace Model
 
 		public long RepositoryId { get; }
 
-		public IReadOnlyCollection<Lane> Lanes { get; }
+		public IReadOnlyCollection<Swimlane> Swimlanes { get; }
 
 		public IReadOnlyCollection<int> AllowedProjectIds { get; }
 
 		public GitHubSettings(
 			long installationId,
 			long repositoryId,
-			Lane[] lanes,
+			Swimlane[] swimlanes,
 			int[] allowedProjectIds)
 		{
 			InstallationId = installationId;
 			RepositoryId = repositoryId;
-			Lanes = lanes;
+			Swimlanes = swimlanes;
 			AllowedProjectIds = allowedProjectIds;
 		}
 	}

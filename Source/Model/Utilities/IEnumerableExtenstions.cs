@@ -18,11 +18,11 @@ namespace Model
 			return false;
 		}
 
-		public static IEnumerable<GrTask> GetSprintTasks(
-			this IEnumerable<GrTask> tasks,
+		public static IEnumerable<Card> GetSprintTasks(
+			this IEnumerable<Card> cards,
 			Sprint sprint)
 		{
-			return tasks.Where(task => !task.ClosedAt.HasValue || task.ClosedAt >= sprint.BeginsAt);
+			return cards.Where(card => !card.ClosedAt.HasValue || card.ClosedAt >= sprint.BeginsAt);
 		}
 	}
 }

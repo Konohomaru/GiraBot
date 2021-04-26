@@ -5,16 +5,16 @@ using System.Linq;
 
 namespace WebAPI
 {
-	public class GitHubTasksDataSource : ITasksDataSource
+	public class GitHubCardsDataSource : ICardsDataSource
 	{
 		private IGitHubFacade Facade { get; }
 
-		public GitHubTasksDataSource(IGitHubFacade facade)
+		public GitHubCardsDataSource(IGitHubFacade facade)
 		{
 			Facade = facade;
 		}
 
-		public IReadOnlyCollection<GrTask> GetProjectTasks(Project project)
+		public IReadOnlyCollection<Card> GetProjectCards(Project project)
 		{
 			return Facade
 				.GetRepositoryIssues(
@@ -22,7 +22,7 @@ namespace WebAPI
 					repositoryId: project.GitHubSettings.RepositoryId)
 				.Where(issue => issue.ProjectIds
 					.ContainsAnyOf(project.GitHubSettings.AllowedProjectIds))
-				.Select(issue => new GrTask(
+				.Select(issue => new Card(
 					id: issue.Id,
 					createdAt: issue.CreatedAt,
 					closedAt: issue.ClosedAt,

@@ -1,6 +1,6 @@
 ﻿namespace Model
 {
-	public class Lane
+	public class Swimlane
 	{
 		public int Id { get; }
 
@@ -8,7 +8,7 @@
 
 		public string MappedAlias { get; }
 
-		public Lane(int id, string name, string mappedAlias)
+		public Swimlane(int id, string name, string mappedAlias)
 		{
 			Id = id;
 			Name = name;

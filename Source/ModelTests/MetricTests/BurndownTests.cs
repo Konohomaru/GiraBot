@@ -42,7 +42,7 @@ namespace ModelTests
 		public void ArgumentNullExceptionIfTasksIsNull()
 		{
 			RepositoryMock
-				.Setup(repository => repository.GetProjectTasks(IsAny<int>()))
+				.Setup(repository => repository.GetProjectCards(IsAny<int>()))
 				.Returns(value: null);
 
 			Throws<ArgumentNullException>(() => Burndown.GetMetric(1));
@@ -62,35 +62,35 @@ namespace ModelTests
 		public void NoRemainingTasksIfNoTasks()
 		{
 			RepositoryMock
-				.Setup(repository => repository.GetProjectTasks(IsAny<int>()))
-				.Returns(Array.Empty<GrTask>());
+				.Setup(repository => repository.GetProjectCards(IsAny<int>()))
+				.Returns(Array.Empty<Card>());
 
 			var metric = Burndown.GetMetric(1).Single();
 
 			Equal(new(), metric.Day);
-			Equal(0, metric.RemainingTasks);
+			Equal(0, metric.RemainingCards);
 		}
 
 		[Fact]
 		public void OneRemainingTaskIfOneOpenedTask()
 		{
 			RepositoryMock
-				.Setup(repository => repository.GetProjectTasks(IsAny<int>()))
-				.Returns(new[] { new GrTaskBuilder().Build() });
+				.Setup(repository => repository.GetProjectCards(IsAny<int>()))
+				.Returns(new[] { new CardBuilder().Build() });
 
 			var metric = Burndown.GetMetric(1).Single();
 
 			Equal(new(), metric.Day);
-			Equal(1, metric.RemainingTasks);
+			Equal(1, metric.RemainingCards);
 		}
 
 		[Fact]
 		public void NoRemainingTasksIfOneClosedTask()
 		{
 			RepositoryMock
-				.Setup(repository => repository.GetProjectTasks(IsAny<int>()))
+				.Setup(repository => repository.GetProjectCards(IsAny<int>()))
 				.Returns(new[] {
-					new GrTaskBuilder()
+					new CardBuilder()
 						.ClosedAt(new())
 						.Build()
 				});
@@ -98,7 +98,7 @@ namespace ModelTests
 			var metric = Burndown.GetMetric(1).Single();
 
 			Equal(new(), metric.Day);
-			Equal(0, metric.RemainingTasks);
+			Equal(0, metric.RemainingCards);
 		}
 
 		[Fact]
@@ -109,9 +109,9 @@ namespace ModelTests
 				.Returns(new DateTime().AddDays(2));
 
 			RepositoryMock
-				.Setup(repository => repository.GetProjectTasks(IsAny<int>()))
+				.Setup(repository => repository.GetProjectCards(IsAny<int>()))
 				.Returns(new[] {
-					new GrTaskBuilder()
+					new CardBuilder()
 						.ClosedAt(new DateTime().AddDays(2))
 						.Build()
 				});
@@ -119,9 +119,9 @@ namespace ModelTests
 			var metric = Burndown.GetMetric(1);
 
 			Equal(3, metric.Count);
-			Equal(1, metric.ElementAt(0).RemainingTasks);
-			Equal(1, metric.ElementAt(1).RemainingTasks);
-			Equal(0, metric.ElementAt(2).RemainingTasks);
+			Equal(1, metric.ElementAt(0).RemainingCards);
+			Equal(1, metric.ElementAt(1).RemainingCards);
+			Equal(0, metric.ElementAt(2).RemainingCards);
 		}
 	}
 }

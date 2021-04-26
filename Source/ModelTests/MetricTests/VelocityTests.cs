@@ -18,7 +18,7 @@ namespace ModelTests
 
 		private Velocity Velocity { get; }
 
-		private Lane[] Lanes { get; }
+		private Swimlane[] Swimlanes { get; }
 
 		public VelocityTests()
 		{
@@ -26,10 +26,10 @@ namespace ModelTests
 			RepositoryMock = new();
 			Velocity = new(CalendarMock.Object, RepositoryMock.Object);
 
-			Lanes = new[] { 
-				new Lane(0, "Documents", "docs"),
-				new Lane(1, "Tech Debts", "tech debts"),
-				new Lane(2, "Bug Fixes", "bugs")
+			Swimlanes = new[] { 
+				new Swimlane(0, "Documents", "docs"),
+				new Swimlane(1, "Tech Debts", "tech debts"),
+				new Swimlane(2, "Bug Fixes", "bugs")
 			};
 
 			RepositoryMock
@@ -41,7 +41,7 @@ namespace ModelTests
 					gitHubSettings: new(
 						installationId: 123456, 
 						repositoryId: 123457,
-						lanes: Lanes,
+						swimlanes: Swimlanes,
 						allowedProjectIds: null)));
 
 			RepositoryMock
@@ -53,25 +53,25 @@ namespace ModelTests
 		public void ThreeLanesForOneDayIfSprintHasOneDay()
 		{
 			RepositoryMock
-				.Setup(repository => repository.GetProjectTasks(IsAny<int>()))
-				.Returns(Array.Empty<GrTask>());
+				.Setup(repository => repository.GetProjectCards(IsAny<int>()))
+				.Returns(Array.Empty<Card>());
 
 			var metric = Velocity.GetMetric(1).Single();
 
 			Equal(new(), metric.Day);
-			Equal(3, metric.ClosedTasksByLane.Count);
-			Equal(0, metric.ClosedTasksByLane[Lanes[0]]);
-			Equal(0, metric.ClosedTasksByLane[Lanes[1]]);
-			Equal(0, metric.ClosedTasksByLane[Lanes[2]]);
+			Equal(3, metric.ClosedCards.Count);
+			Equal(0, metric.ClosedCards[Swimlanes[0]]);
+			Equal(0, metric.ClosedCards[Swimlanes[1]]);
+			Equal(0, metric.ClosedCards[Swimlanes[2]]);
 		}
 
 		[Fact]
 		public void NoClosedTasksIfTaskIsOpen()
 		{
 			RepositoryMock
-				.Setup(repository => repository.GetProjectTasks(IsAny<int>()))
+				.Setup(repository => repository.GetProjectCards(IsAny<int>()))
 				.Returns(new[] {
-					new GrTaskBuilder()
+					new CardBuilder()
 						.ClosedAt(new DateTime().AddDays(1))
 						.Build()
 				});
@@ -79,31 +79,31 @@ namespace ModelTests
 			var metric = Velocity.GetMetric(1).Single();
 
 			Equal(new(), metric.Day);
-			Equal(3, metric.ClosedTasksByLane.Count);
-			Equal(0, metric.ClosedTasksByLane[Lanes[0]]);
-			Equal(0, metric.ClosedTasksByLane[Lanes[1]]);
-			Equal(0, metric.ClosedTasksByLane[Lanes[2]]);
+			Equal(3, metric.ClosedCards.Count);
+			Equal(0, metric.ClosedCards[Swimlanes[0]]);
+			Equal(0, metric.ClosedCards[Swimlanes[1]]);
+			Equal(0, metric.ClosedCards[Swimlanes[2]]);
 		}
 
 		[Fact]
 		public void OneClosedTaskByLaneIfTaskIsClosed()
 		{
 			RepositoryMock
-				.Setup(repository => repository.GetProjectTasks(IsAny<int>()))
+				.Setup(repository => repository.GetProjectCards(IsAny<int>()))
 				.Returns(new[] {
-					new GrTaskBuilder()
+					new CardBuilder()
 						.ClosedAt(new DateTime())
-						.WithLabel(Lanes[0].MappedAlias)
+						.WithLabel(Swimlanes[0].MappedAlias)
 						.Build()
 				});
 
 			var metric = Velocity.GetMetric(1).Single();
 
 			Equal(new(), metric.Day);
-			Equal(3, metric.ClosedTasksByLane.Count);
-			Equal(1, metric.ClosedTasksByLane[Lanes[0]]);
-			Equal(0, metric.ClosedTasksByLane[Lanes[1]]);
-			Equal(0, metric.ClosedTasksByLane[Lanes[2]]);
+			Equal(3, metric.ClosedCards.Count);
+			Equal(1, metric.ClosedCards[Swimlanes[0]]);
+			Equal(0, metric.ClosedCards[Swimlanes[1]]);
+			Equal(0, metric.ClosedCards[Swimlanes[2]]);
 		}
 	}
 }

@@ -3,26 +3,30 @@ using System.Collections.Generic;
 
 namespace Model
 {
-	public class TaskCycleTimeNode
+	public class Card
 	{
-		public string Title { get; }
+		public int Id { get; }
 
 		public DateTime CreatedAt { get; }
 
 		public DateTime? ClosedAt { get; }
 
+		public string Title { get; }
+
 		public IReadOnlyCollection<string> Labels { get; }
 
-		public TaskCycleTimeNode(
-			string title,
+		public Card(
+			int id,
 			DateTime createdAt,
 			DateTime? closedAt,
-			string[] labels)
+			string title,
+			IReadOnlyCollection<string> labels)
 		{
-			Title = title;
+			Id = id;
 			CreatedAt = createdAt;
 			ClosedAt = closedAt;
-			Labels = labels;
+			Title = title;
+			Labels = labels ?? Array.Empty<string>();
 		}
 	}
 }

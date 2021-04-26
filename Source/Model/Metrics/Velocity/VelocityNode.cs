@@ -7,12 +7,12 @@ namespace Model
 	{
 		public DateTime Day { get; set; }
 
-		public IDictionary<Lane, int> ClosedTasksByLane { get; set; }
+		public IDictionary<Swimlane, int> ClosedCards { get; set; }
 
-		public VelocityNode(DateTime day, IDictionary<Lane, int> closedTasksByLane)
+		public VelocityNode(DateTime day, IDictionary<Swimlane, int> closedCards)
 		{
 			Day = day;
-			ClosedTasksByLane = closedTasksByLane;
+			ClosedCards = closedCards;
 		}
 	}
 }

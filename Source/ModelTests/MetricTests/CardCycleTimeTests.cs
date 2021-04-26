@@ -9,29 +9,29 @@ using static Xunit.Assert;
 
 namespace ModelTests
 {
-	public class TaskCycleTimeTests
+	public class CardCycleTimeTests
 	{
 		private Mock<IProjectsRepository> RepositoryMock { get; }
 
-		private TaskCycleTime TaskCycleTime { get; }
+		private CardCycleTime CardCycleTime { get; }
 
-		public TaskCycleTimeTests()
+		public CardCycleTimeTests()
 		{
 			RepositoryMock = new();
-			TaskCycleTime = new(RepositoryMock.Object);
+			CardCycleTime = new(RepositoryMock.Object);
 		}
 
 		[Fact]
 		public void OneOpenTaskIfOneOpenTaskExists()
 		{
 			RepositoryMock
-				.Setup(repository => repository.GetProjectTasks(IsAny<int>()))
+				.Setup(repository => repository.GetProjectCards(IsAny<int>()))
 				.Returns(new[] {
-					new GrTaskBuilder()
+					new CardBuilder()
 						.Build()
 				});
 
-			var metric = TaskCycleTime.GetMetric(0).Single();
+			var metric = CardCycleTime.GetMetric(0).Single();
 
 			Equal(new(), metric.CreatedAt);
 		}
