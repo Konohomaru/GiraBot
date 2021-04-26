@@ -50,7 +50,7 @@ namespace ModelTests
 		}
 
 		[Fact]
-		public void ThreeLanesForOneDayIfSprintHasOneDay()
+		public void ThreeSwimlanesForOneDayIfSprintHasOneDay()
 		{
 			RepositoryMock
 				.Setup(repository => repository.GetProjectCards(IsAny<int>()))
@@ -66,7 +66,7 @@ namespace ModelTests
 		}
 
 		[Fact]
-		public void NoClosedTasksIfTaskIsOpen()
+		public void NoClosedCardsIfCardIsOpen()
 		{
 			RepositoryMock
 				.Setup(repository => repository.GetProjectCards(IsAny<int>()))
@@ -86,7 +86,7 @@ namespace ModelTests
 		}
 
 		[Fact]
-		public void OneClosedTaskByLaneIfTaskIsClosed()
+		public void OneClosedCardBySwimlaneIfCardIsClosed()
 		{
 			RepositoryMock
 				.Setup(repository => repository.GetProjectCards(IsAny<int>()))

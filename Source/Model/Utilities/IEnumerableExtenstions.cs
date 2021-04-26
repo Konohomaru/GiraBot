@@ -18,7 +18,7 @@ namespace Model
 			return false;
 		}
 
-		public static IEnumerable<Card> GetSprintTasks(
+		public static IEnumerable<Card> GetSprintCards(
 			this IEnumerable<Card> cards,
 			Sprint sprint)
 		{

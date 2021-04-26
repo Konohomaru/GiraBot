@@ -39,7 +39,7 @@ namespace ModelTests
 		}
 
 		[Fact]
-		public void ArgumentNullExceptionIfTasksIsNull()
+		public void ArgumentNullExceptionIfCardsIsNull()
 		{
 			RepositoryMock
 				.Setup(repository => repository.GetProjectCards(IsAny<int>()))
@@ -59,7 +59,7 @@ namespace ModelTests
 		}
 
 		[Fact]
-		public void NoRemainingTasksIfNoTasks()
+		public void NoRemainingCardsIfNoCards()
 		{
 			RepositoryMock
 				.Setup(repository => repository.GetProjectCards(IsAny<int>()))
@@ -72,7 +72,7 @@ namespace ModelTests
 		}
 
 		[Fact]
-		public void OneRemainingTaskIfOneOpenedTask()
+		public void OneRemainingCardIfOneOpenedCard()
 		{
 			RepositoryMock
 				.Setup(repository => repository.GetProjectCards(IsAny<int>()))
@@ -85,7 +85,7 @@ namespace ModelTests
 		}
 
 		[Fact]
-		public void NoRemainingTasksIfOneClosedTask()
+		public void NoRemainingCardsIfOneClosedCard()
 		{
 			RepositoryMock
 				.Setup(repository => repository.GetProjectCards(IsAny<int>()))
@@ -102,7 +102,7 @@ namespace ModelTests
 		}
 
 		[Fact]
-		public void OneRemainingTaskForTwoDaysIfItWasClosedOnThirdDay()
+		public void OneRemainingCardForTwoDaysIfItWasClosedOnThirdDay()
 		{
 			CalendarMock
 				.Setup(calendar => calendar.GetCurrentUtcDateTime())

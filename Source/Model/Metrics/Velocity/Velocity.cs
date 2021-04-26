@@ -25,7 +25,7 @@ namespace Model
 
 			var sprintCards = Repository
 				.GetProjectCards(projectId)
-				.GetSprintTasks(latestSprint)
+				.GetSprintCards(latestSprint)
 				.ToArray();
 
 			return GetMetricNodes(latestSprint, projectSwimlanes, sprintCards).ToArray();

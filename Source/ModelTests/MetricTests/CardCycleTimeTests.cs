@@ -22,7 +22,7 @@ namespace ModelTests
 		}
 
 		[Fact]
-		public void OneOpenTaskIfOneOpenTaskExists()
+		public void OneOpenCardIfOneOpenCardExists()
 		{
 			RepositoryMock
 				.Setup(repository => repository.GetProjectCards(IsAny<int>()))

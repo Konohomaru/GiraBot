@@ -8,34 +8,34 @@ namespace ModelTests
 	{
 		public CardBuilder WithId(int id)
 		{
-			return SetValue(task => task.Id, id);
+			return SetValue(card => card.Id, id);
 		}
 
 		public CardBuilder ClosedAt(DateTime closedAt)
 		{
-			return SetValue(task => task.ClosedAt, closedAt);
+			return SetValue(card => card.ClosedAt, closedAt);
 		}
 
 		public CardBuilder WithLabel(string label)
 		{
 			var labels = GetValue(
-				accessor: task => task.Labels,
+				accessor: card => card.Labels,
 				defaultValue: Array.Empty<string>())
 			.ToList();
 			
 			labels.Add(label);
 
-			return SetValue(task => task.Labels, labels.ToArray());
+			return SetValue(card => card.Labels, labels.ToArray());
 		}
 
 		public override Card Build()
 		{
 			return new Card(
-				id: GetValue(task => task.Id),
+				id: GetValue(card => card.Id),
 				createdAt: default,
-				closedAt: GetValue(task => task.ClosedAt),
+				closedAt: GetValue(card => card.ClosedAt),
 				title: default,
-				labels: GetValue(task => task.Labels, Array.Empty<string>()));
+				labels: GetValue(card => card.Labels, Array.Empty<string>()));
 		}
 	}
 }
