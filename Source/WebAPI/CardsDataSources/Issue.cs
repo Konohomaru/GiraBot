@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Integrations
+namespace WebAPI
 {
 	public class Issue
 	{
