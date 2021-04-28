@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ViaApp": {
+      "commandName": "Project",
+      "commandLineArgs": "issues <installationId> <repositoryId> <projectId>"
+    }
+  }
+}
