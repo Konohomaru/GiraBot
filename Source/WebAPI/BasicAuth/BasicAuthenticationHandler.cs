@@ -42,7 +42,7 @@ namespace WebAPI
 			}
 
 			if (Configuration["Password"] != password)
-                return Task.FromResult(AuthenticateResult.Fail("Invalid Credentials"));
+                return Task.FromResult(AuthenticateResult.Fail("Invalid Credentials."));
 
             var claims = new[] {
                 new Claim(ClaimTypes.Name, username),

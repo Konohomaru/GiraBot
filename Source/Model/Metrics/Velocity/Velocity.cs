@@ -17,24 +17,24 @@ namespace Model
 
 		public IReadOnlyCollection<VelocityNode> GetMetric(int projectId)
 		{
-			var projectLines = Repository.GetProject(projectId).GitHubSettings.Lanes;
+			var projectSwimlanes = Repository.GetProject(projectId).GitHubSettings.Swimlanes;
 
 			var latestSprint = Repository
 				.GetProjectSprints(projectId)
 				.Last();
 
-			var sprintTasks = Repository
-				.GetProjectTasks(projectId)
-				.GetSprintTasks(latestSprint)
+			var sprintCards = Repository
+				.GetProjectCards(projectId)
+				.GetSprintCards(latestSprint)
 				.ToArray();
 
-			return GetMetricNodes(latestSprint, projectLines, sprintTasks).ToArray();
+			return GetMetricNodes(latestSprint, projectSwimlanes, sprintCards).ToArray();
 		}
 
 		private IEnumerable<VelocityNode> GetMetricNodes(
 			Sprint latestSprint,
-			IReadOnlyCollection<Line> lines,
-			IReadOnlyCollection<GiraTask> sprintTasks)
+			IReadOnlyCollection<Swimlane> swimlanes,
+			IReadOnlyCollection<Card> sprintCards)
 		{
 			var today = Calendar.GetCurrentUtcDateTime();
 			var iterationDay = latestSprint.BeginsAt;
@@ -42,11 +42,11 @@ namespace Model
 			while (latestSprint.ContainsDate(iterationDay) && iterationDay <= today) {
 				yield return new VelocityNode(
 					iterationDay,
-					lines.ToDictionary(
-						keySelector: line => line,
-						elementSelector: line => sprintTasks
-							.Where(task => task.ClosedAt <= iterationDay)
-							.Count(task => task.Labels.Contains(line.MappedAlias))));
+					swimlanes.ToDictionary(
+						keySelector: swimlane => swimlane,
+						elementSelector: swimlane => sprintCards
+							.Where(card => card.ClosedAt <= iterationDay)
+							.Count(card => card.Labels.Contains(swimlane.MappedAlias))));
 				iterationDay = iterationDay.AddDays(1);
 			}
 		}

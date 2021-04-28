@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace WebAPI
 {
-	public class TaskCycleTimeNodeDto
+	public class CardCycleTimeNodeDto
 	{
 		public string Title { get; set; }
 
@@ -12,13 +12,11 @@ namespace WebAPI
 
 		public DateTime? ClosedAt { get; set; }
 
-		public TimeSpan Duration { get; set; }
-
 		public IReadOnlyCollection<string> Labels { get; set; }
 
-		public static TaskCycleTimeNodeDto BuildFrom(TaskCycleTimeNode node)
+		public static CardCycleTimeNodeDto BuildFrom(CardCycleTimeNode node)
 		{
-			return new TaskCycleTimeNodeDto {
+			return new CardCycleTimeNodeDto {
 				Title = node.Title,
 				CreatedAt = node.CreatedAt,
 				ClosedAt = node.ClosedAt,

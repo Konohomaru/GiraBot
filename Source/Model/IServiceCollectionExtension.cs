@@ -4,13 +4,13 @@ namespace Model
 {
 	public static class IServiceCollectionExtension
 	{
-		public static void AddGiraModel(this IServiceCollection services, string gitHubPem)
+		public static void AddGiraModel(this IServiceCollection services, ICardsDataSource dataSource)
 		{
-			services.AddTransient<IGitHubFacade, GiraGitHubFacade>(_ => new GiraGitHubFacade(gitHubPem));
-			services.AddSingleton<ICalendar, GiraCalendar>();
+			services.AddSingleton(dataSource);
+			services.AddSingleton<ICalendar, Calendar>();
 			services.AddSingleton<Burndown>();
 			services.AddSingleton<Velocity>();
-			services.AddSingleton<TaskCycleTime>();
+			services.AddSingleton<CardCycleTime>();
 			services.AddSingleton<IProjectsRepository, ProjectsRepository>();
 		}
 	}

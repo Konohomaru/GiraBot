@@ -6,26 +6,23 @@ namespace Model
 {
 	public static class IEnumerableExtenstions
 	{
-		public static bool ContainsAnyOf(
-			this IEnumerable<RepositoryProject> source,
-			IEnumerable<RepositoryProject> collection)
+		public static bool ContainsAnyOf<T>(
+			this IEnumerable<T> source,
+			IEnumerable<T> collection)
+			where T : IComparable<T>
 		{
-			if (source is null) throw new ArgumentNullException(nameof(source));
-			if (collection is null) throw new ArgumentNullException(nameof(source));
-
 			foreach (var i in source)
 				foreach (var j in collection)
-					if (i.Id.CompareTo(j.Id) == 0)
-						return true;
+					if (i.CompareTo(j) == 0) return true;
 
 			return false;
 		}
 
-		public static IEnumerable<GiraTask> GetSprintTasks(this IEnumerable<GiraTask> tasks, Sprint sprint)
+		public static IEnumerable<Card> GetSprintCards(
+			this IEnumerable<Card> cards,
+			Sprint sprint)
 		{
-			return tasks
-				.Where(task => !task.ClosedAt.HasValue || task.ClosedAt >= sprint.BeginsAt)
-				.ToArray();
+			return cards.Where(card => !card.ClosedAt.HasValue || card.ClosedAt >= sprint.BeginsAt);
 		}
 	}
 }

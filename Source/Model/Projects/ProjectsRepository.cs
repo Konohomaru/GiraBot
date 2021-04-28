@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 namespace Model
 {
@@ -7,74 +6,51 @@ namespace Model
 	{
 		private ICalendar Calendar { get; }
 
-		private IGitHubFacade GitHubClient { get; }
+		private ICardsDataSource DataSource { get; }
 
-		public ProjectsRepository(ICalendar calendar, IGitHubFacade facade)
+		public ProjectsRepository(ICalendar calendar, ICardsDataSource dataSource)
 		{
 			Calendar = calendar;
-			GitHubClient = facade;
-		}
-
-		public GitHubSettings GetProjectGitHubSettings(int projectId)
-		{
-			return new GitHubSettings(
-				installationId: 15161810,
-				repositoryId: 229932826,
-				lines: new[] {
-					new Line(0, "Bugs", "bug"),
-					new Line(1, "Tech Debts", "tech debt"),
-					new Line(2, "Road Map", "road map")
-				},
-				allowedProjects: new[] { new RepositoryProject(3720514, "Caprica2.0") });
+			DataSource = dataSource;
 		}
 
 		public Project GetProject(int projectId)
 		{
-			var gitHubSettings = GetProjectGitHubSettings(projectId);
-
-			var gitHubRepository = GitHubClient.GetRepository(
-				installationId: gitHubSettings.InstallationId,
-				repositoryId: gitHubSettings.RepositoryId);
-
 			return new Project(
 				id: 0,
-				name: gitHubRepository.FullName,
-				startSprintsAt: gitHubRepository.CreatedAt,
-				gitHubSettings: gitHubSettings);
+				name: "mindbox-moscow/issues-devx",
+				beginSprintsAt: new(2021, 01, 01),
+				gitHubSettings: new GitHubSettings(
+					installationId: 15161810,
+					repositoryId: 229932826,
+					swimlanes: new[] {
+						new Swimlane(0, "Bugs", "bug"),
+						new Swimlane(1, "Tech Debts", "tech debt"),
+						new Swimlane(2, "Road Map", "road map")
+					},
+					allowedProjectIds: new[] { 3720514 }));
 		}
 
 		public IEnumerable<Sprint> GetProjectSprints(int projectId)
 		{
-			var giraProject = GetProject(projectId);
-			var iterationSprntBeginingDay = giraProject.BeginSprintsAt;
+			var project = GetProject(projectId);
+			var iterationSprntBeginingDay = project.BeginSprintsAt;
 			var today = Calendar.GetCurrentUtcDateTime();
 
-			while (iterationSprntBeginingDay <= today) {
+			while (iterationSprntBeginingDay <= today)
+			{
 				yield return new Sprint(
 					id: iterationSprntBeginingDay.DayOfYear,
 					beginAt: iterationSprntBeginingDay,
-					durationDays: giraProject.SprtinDurationDays);
+					length: project.SprintLength);
 
-				iterationSprntBeginingDay = iterationSprntBeginingDay.AddDays(giraProject.SprtinDurationDays);
+				iterationSprntBeginingDay = iterationSprntBeginingDay.AddDays(project.SprintLength);
 			}
 		}
 
-		public IReadOnlyCollection<GiraTask> GetProjectTasks(int projectId)
+		public IReadOnlyCollection<Card> GetProjectCards(int projectId)
 		{
-			var gitHubSettings = GetProjectGitHubSettings(projectId);
-
-			return GitHubClient
-				.GetRepositoryIssues(
-					installationId: gitHubSettings.InstallationId,
-					repositoryId: gitHubSettings.RepositoryId)
-				.Where(issue => issue.Projects.ContainsAnyOf(gitHubSettings.AllowedProjects))
-				.Select(issue => new GiraTask(
-					id: issue.Id,
-					createdAt: issue.CreateAt,
-					closedAt: issue.ClosedAt,
-					title: issue.Title,
-					labels: issue.Labels))
-				.ToArray();
+			return DataSource.GetProjectCards(GetProject(projectId));
 		}
 	}
 }

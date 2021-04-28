@@ -4,21 +4,25 @@ namespace Model
 {
 	public class Project
 	{
-		public int Id { get; private set; }
+		public int Id { get; }
 
-		public string Name { get; private set; }
+		public string Name { get; }
 
-		public int SprtinDurationDays { get; private set; } = 7;
+		public int SprintLength { get; } = 7;
 
-		public DateTime BeginSprintsAt { get; private set; }
+		public DateTime BeginSprintsAt { get; }
 
-		public GitHubSettings GitHubSettings { get; private set; }
+		public GitHubSettings GitHubSettings { get; }
 
-		public Project(int id, string name, DateTime startSprintsAt, GitHubSettings gitHubSettings)
+		public Project(
+			int id,
+			string name,
+			DateTime beginSprintsAt,
+			GitHubSettings gitHubSettings)
 		{
 			Id = id;
 			Name = name;
-			BeginSprintsAt = startSprintsAt;
+			BeginSprintsAt = beginSprintsAt;
 			GitHubSettings = gitHubSettings;
 		}
 	}

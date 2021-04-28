@@ -2,7 +2,7 @@
 
 namespace Model
 {
-	public class GiraCalendar : ICalendar
+	public class Calendar : ICalendar
 	{
 		public DateTime GetCurrentUtcDateTime()
 		{

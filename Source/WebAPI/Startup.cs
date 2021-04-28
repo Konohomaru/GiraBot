@@ -21,7 +21,7 @@ namespace WebAPI
 		{
 			services.AddControllers();
 			services.AddHealthChecks();
-			services.AddGiraModel(Configuration["Pem"]);
+			services.AddGiraModel(new GitHubCardsDataSource(Configuration["Pem"]));
 			services
 				.AddAuthentication("BasicAuthentication")
 				.AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);

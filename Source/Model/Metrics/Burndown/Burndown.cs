@@ -21,15 +21,15 @@ namespace Model
 				.GetProjectSprints(projectId)
 				.Last();
 
-			var sprintTasks = Repository
-				.GetProjectTasks(projectId)
-				.GetSprintTasks(latestSprint)
+			var sprintCards = Repository
+				.GetProjectCards(projectId)
+				.GetSprintCards(latestSprint)
 				.ToArray();
 
-			return GetMetricNodes(latestSprint, sprintTasks).ToArray();
+			return GetMetricNodes(latestSprint, sprintCards).ToArray();
 		}
 
-		private IEnumerable<BurndownNode> GetMetricNodes(Sprint latestSprint, IReadOnlyCollection<GiraTask> sprintTasks)
+		private IEnumerable<BurndownNode> GetMetricNodes(Sprint latestSprint, IReadOnlyCollection<Card> sprintCards)
 		{
 			var today = Calendar.GetCurrentUtcDateTime();
 			var iterationDay = latestSprint.BeginsAt;
@@ -37,9 +37,8 @@ namespace Model
 			while (latestSprint.ContainsDate(iterationDay) && iterationDay <= today) {
 				yield return new BurndownNode(
 					iterationDay,
-					sprintTasks.Count(task =>
-						task.CreatedAt <= iterationDay &&
-						(!task.ClosedAt.HasValue || task.ClosedAt > iterationDay)));
+					sprintCards.Count(card => !card.ClosedAt.HasValue || card.ClosedAt > iterationDay));
+
 				iterationDay = iterationDay.AddDays(1);
 			}
 		}
