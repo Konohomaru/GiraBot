@@ -28,7 +28,7 @@ namespace Model
 						new Swimlane(1, "Tech Debts", "tech debt"),
 						new Swimlane(2, "Road Map", "road map")
 					},
-					allowedProjectIds: new[] { 3720514 }));
+					allowedProjectIds: new[] { 4241787 }));
 		}
 
 		public IEnumerable<Sprint> GetProjectSprints(int projectId)
