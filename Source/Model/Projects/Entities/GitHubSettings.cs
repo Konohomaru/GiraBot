@@ -4,23 +4,23 @@ namespace Model
 {
 	public class GitHubSettings
 	{
-		public long InstallationId { get; private set; }
+		public long InstallationId { get; }
 
-		public long RepositoryId { get; private set; }
+		public long RepositoryId { get; }
 
-		public IReadOnlyCollection<Line> Lanes { get; private set; }
+		public IReadOnlyCollection<Swimlane> Swimlanes { get; }
 
-		public IReadOnlyCollection<int> AllowedProjectIds { get; private set; }
+		public IReadOnlyCollection<int> AllowedProjectIds { get; }
 
 		public GitHubSettings(
 			long installationId,
 			long repositoryId,
-			Line[] lines,
+			Swimlane[] swimlanes,
 			int[] allowedProjectIds)
 		{
 			InstallationId = installationId;
 			RepositoryId = repositoryId;
-			Lanes = lines;
+			Swimlanes = swimlanes;
 			AllowedProjectIds = allowedProjectIds;
 		}
 	}

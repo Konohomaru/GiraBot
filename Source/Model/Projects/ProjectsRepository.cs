@@ -6,12 +6,12 @@ namespace Model
 	{
 		private ICalendar Calendar { get; }
 
-		private ITasksDataSource TasksDataSource { get; }
+		private ICardsDataSource DataSource { get; }
 
-		public ProjectsRepository(ICalendar calendar, ITasksDataSource tasksDataSource)
+		public ProjectsRepository(ICalendar calendar, ICardsDataSource dataSource)
 		{
 			Calendar = calendar;
-			TasksDataSource = tasksDataSource;
+			DataSource = dataSource;
 		}
 
 		public Project GetProject(int projectId)
@@ -19,22 +19,22 @@ namespace Model
 			return new Project(
 				id: 0,
 				name: "mindbox-moscow/issues-devx",
-				startSprintsAt: new(2021, 01, 01),
+				beginSprintsAt: new(2021, 01, 01),
 				gitHubSettings: new GitHubSettings(
 					installationId: 15161810,
 					repositoryId: 229932826,
-					lines: new[] {
-						new Line(0, "Bugs", "bug"),
-						new Line(1, "Tech Debts", "tech debt"),
-						new Line(2, "Road Map", "road map")
+					swimlanes: new[] {
+						new Swimlane(0, "Bugs", "bug"),
+						new Swimlane(1, "Tech Debts", "tech debt"),
+						new Swimlane(2, "Road Map", "road map")
 					},
 					allowedProjectIds: new[] { 3720514 }));
 		}
 
 		public IEnumerable<Sprint> GetProjectSprints(int projectId)
 		{
-			var giraProject = GetProject(projectId);
-			var iterationSprntBeginingDay = giraProject.BeginSprintsAt;
+			var project = GetProject(projectId);
+			var iterationSprntBeginingDay = project.BeginSprintsAt;
 			var today = Calendar.GetCurrentUtcDateTime();
 
 			while (iterationSprntBeginingDay <= today)
@@ -42,15 +42,15 @@ namespace Model
 				yield return new Sprint(
 					id: iterationSprntBeginingDay.DayOfYear,
 					beginAt: iterationSprntBeginingDay,
-					durationDays: giraProject.SprtinDurationDays);
+					length: project.SprintLength);
 
-				iterationSprntBeginingDay = iterationSprntBeginingDay.AddDays(giraProject.SprtinDurationDays);
+				iterationSprntBeginingDay = iterationSprntBeginingDay.AddDays(project.SprintLength);
 			}
 		}
 
-		public IReadOnlyCollection<GiraTask> GetProjectTasks(int projectId)
+		public IReadOnlyCollection<Card> GetProjectCards(int projectId)
 		{
-			return TasksDataSource.GetProjectTasks(GetProject(projectId));
+			return DataSource.GetProjectCards(GetProject(projectId));
 		}
 	}
 }

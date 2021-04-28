@@ -4,149 +4,106 @@ using System;
 using System.Linq;
 using Xunit;
 
+using static Moq.It;
+using static Xunit.Assert;
+
+
 namespace ModelTests
 {
 	public class VelocityTests
 	{
 		private Mock<ICalendar> CalendarMock { get; }
 
-		private Mock<IProjectsRepository> DirectoryMock { get; }
+		private Mock<IProjectsRepository> RepositoryMock { get; }
 
 		private Velocity Velocity { get; }
 
-		private Line[] Lanes { get; }
+		private Swimlane[] Swimlanes { get; }
 
 		public VelocityTests()
 		{
 			CalendarMock = new();
-			DirectoryMock = new();
-			Velocity = new(CalendarMock.Object, DirectoryMock.Object);
+			RepositoryMock = new();
+			Velocity = new(CalendarMock.Object, RepositoryMock.Object);
 
-			Lanes = new[] { 
-				new Line(0, "Documents", "docs"),
-				new Line(1, "Tech Debts", "tech debts"),
-				new Line(2, "Bug Fixes", "bugs")
+			Swimlanes = new[] { 
+				new Swimlane(0, "Documents", "docs"),
+				new Swimlane(1, "Tech Debts", "tech debts"),
+				new Swimlane(2, "Bug Fixes", "bugs")
 			};
 
-			DirectoryMock
-				.Setup(directory => directory.GetProject(0))
+			RepositoryMock
+				.Setup(repository => repository.GetProject(1))
 				.Returns(new Project(
 					id: 0,
 					name: "whipping-boy",
-					startSprintsAt: new(2021, 01, 01),
+					beginSprintsAt: new(2021, 01, 01),
 					gitHubSettings: new(
 						installationId: 123456, 
 						repositoryId: 123457,
-						lines: Lanes,
+						swimlanes: Swimlanes,
 						allowedProjectIds: null)));
+
+			RepositoryMock
+				.Setup(repository => repository.GetProjectSprints(1))
+				.Returns(new[] { new Sprint(0, new(), 7) });
 		}
 
 		[Fact]
-		public void GetMetric_OneClosedTaskInEachLane_LanesWithOneClosedTask()
+		public void ThreeSwimlanesForOneDayIfSprintHasOneDay()
 		{
-			CalendarMock
-				.Setup(calendar => calendar.GetCurrentUtcDateTime())
-				.Returns(new DateTime(2021, 01, 01));
+			RepositoryMock
+				.Setup(repository => repository.GetProjectCards(IsAny<int>()))
+				.Returns(Array.Empty<Card>());
 
-			DirectoryMock
-				.Setup(directory => directory.GetProjectSprints(It.IsAny<int>()))
-				.Returns(new[] { new Sprint(0, new(2021, 01, 01), 7) });
+			var metric = Velocity.GetMetric(1).Single();
 
-			DirectoryMock
-				.Setup(directory => directory.GetProjectTasks(It.IsAny<int>()))
+			Equal(new(), metric.Day);
+			Equal(3, metric.ClosedCards.Count);
+			Equal(0, metric.ClosedCards[Swimlanes[0]]);
+			Equal(0, metric.ClosedCards[Swimlanes[1]]);
+			Equal(0, metric.ClosedCards[Swimlanes[2]]);
+		}
+
+		[Fact]
+		public void NoClosedCardsIfCardIsOpen()
+		{
+			RepositoryMock
+				.Setup(repository => repository.GetProjectCards(IsAny<int>()))
 				.Returns(new[] {
-					new GiraTask(0, new(2021, 01, 01), new(2021, 01, 01), "task", new[] { "docs" }),
-					new GiraTask(0, new(2021, 01, 01), new(2021, 01, 01), "task 2", new[] { "tech debts" }),
-					new GiraTask(0, new(2021, 01, 01), new(2021, 01, 01), "task 3", new[] { "bugs" }),
+					new CardBuilder()
+						.ClosedAt(new DateTime().AddDays(1))
+						.Build()
 				});
 
-			var actualMetric = Velocity.GetMetric(0).Single();
+			var metric = Velocity.GetMetric(1).Single();
 
-			Assert.Equal(3, actualMetric.ClosetTasksByLane.Count);
-			Assert.Equal(1, actualMetric.ClosetTasksByLane[Lanes[0]]);
-			Assert.Equal(1, actualMetric.ClosetTasksByLane[Lanes[1]]);
-			Assert.Equal(1, actualMetric.ClosetTasksByLane[Lanes[2]]);
+			Equal(new(), metric.Day);
+			Equal(3, metric.ClosedCards.Count);
+			Equal(0, metric.ClosedCards[Swimlanes[0]]);
+			Equal(0, metric.ClosedCards[Swimlanes[1]]);
+			Equal(0, metric.ClosedCards[Swimlanes[2]]);
 		}
 
 		[Fact]
-		public void GetMetric_OneClosedTaskByOneLane_OneClosedTaskByOneLaneAndZeroByOthers()
+		public void OneClosedCardBySwimlaneIfCardIsClosed()
 		{
-			CalendarMock
-				.Setup(calendar => calendar.GetCurrentUtcDateTime())
-				.Returns(new DateTime(2021, 01, 01));
-
-			DirectoryMock
-				.Setup(directory => directory.GetProjectSprints(It.IsAny<int>()))
-				.Returns(new[] { new Sprint(0, new(2021, 01, 01), 7) });
-
-			DirectoryMock
-				.Setup(directory => directory.GetProjectTasks(It.IsAny<int>()))
+			RepositoryMock
+				.Setup(repository => repository.GetProjectCards(IsAny<int>()))
 				.Returns(new[] {
-					new GiraTask(0, new(2021, 01, 01), new(2021, 01, 01), "task", new[] { "docs" })
+					new CardBuilder()
+						.ClosedAt(new DateTime())
+						.WithLabel(Swimlanes[0].MappedAlias)
+						.Build()
 				});
 
-			var actualMetric = Velocity.GetMetric(0).Single();
+			var metric = Velocity.GetMetric(1).Single();
 
-			Assert.Equal(3, actualMetric.ClosetTasksByLane.Count);
-			Assert.Equal(1, actualMetric.ClosetTasksByLane[Lanes[0]]);
-			Assert.Equal(0, actualMetric.ClosetTasksByLane[Lanes[1]]);
-			Assert.Equal(0, actualMetric.ClosetTasksByLane[Lanes[2]]);
-		}
-
-		[Fact]
-		public void GetMetric_OneOpenedTaskByOneLane_ZeroClosedTasksInAllLanes()
-		{
-			CalendarMock
-				.Setup(calendar => calendar.GetCurrentUtcDateTime())
-				.Returns(new DateTime(2021, 01, 01));
-
-			DirectoryMock
-				.Setup(directory => directory.GetProjectSprints(It.IsAny<int>()))
-				.Returns(new[] { new Sprint(0, new(2021, 01, 01), 7) });
-
-			DirectoryMock
-				.Setup(directory => directory.GetProjectTasks(It.IsAny<int>()))
-				.Returns(Array.Empty<GiraTask>());
-
-			var actualMetric = Velocity.GetMetric(0).Single();
-
-			Assert.Equal(3, actualMetric.ClosetTasksByLane.Count);
-			Assert.Equal(0, actualMetric.ClosetTasksByLane[Lanes[0]]);
-			Assert.Equal(0, actualMetric.ClosetTasksByLane[Lanes[1]]);
-			Assert.Equal(0, actualMetric.ClosetTasksByLane[Lanes[2]]);
-		}
-
-		[Fact]
-		public void GetMetric_TwoClosedTasksByEachLane_OneClosedTasksEachDayByEachLane()
-		{
-			CalendarMock
-				.Setup(calendar => calendar.GetCurrentUtcDateTime())
-				.Returns(new DateTime(2021, 01, 02));
-
-			DirectoryMock
-				.Setup(directory => directory.GetProjectSprints(It.IsAny<int>()))
-				.Returns(new[] { new Sprint(0, new(2021, 01, 01), 7) });
-
-			DirectoryMock
-				.Setup(directory => directory.GetProjectTasks(It.IsAny<int>()))
-				.Returns(new[] {
-					new GiraTask(0, new(2021, 01, 01), new(2021, 01, 01), "task", new[] { "docs" }),
-					new GiraTask(0, new(2021, 01, 01), new(2021, 01, 02), "task 2", new[] { "docs" }),
-					new GiraTask(0, new(2021, 01, 01), new(2021, 01, 01), "task 3", new[] { "tech debts" }),
-					new GiraTask(0, new(2021, 01, 01), new(2021, 01, 02), "task 4", new[] { "tech debts" }),
-					new GiraTask(0, new(2021, 01, 01), new(2021, 01, 01), "task 5", new[] { "bugs" }),
-					new GiraTask(0, new(2021, 01, 01), new(2021, 01, 02), "task 6", new[] { "bugs" }),
-				});
-
-			var actualMetric = Velocity.GetMetric(0);
-
-			Assert.Equal(3, actualMetric.ElementAt(0).ClosetTasksByLane.Count);
-			Assert.Equal(1, actualMetric.ElementAt(0).ClosetTasksByLane[Lanes[0]]);
-			Assert.Equal(1, actualMetric.ElementAt(0).ClosetTasksByLane[Lanes[1]]);
-			Assert.Equal(1, actualMetric.ElementAt(0).ClosetTasksByLane[Lanes[2]]);
-			Assert.Equal(2, actualMetric.ElementAt(1).ClosetTasksByLane[Lanes[0]]);
-			Assert.Equal(2, actualMetric.ElementAt(1).ClosetTasksByLane[Lanes[1]]);
-			Assert.Equal(2, actualMetric.ElementAt(1).ClosetTasksByLane[Lanes[2]]);
+			Equal(new(), metric.Day);
+			Equal(3, metric.ClosedCards.Count);
+			Equal(1, metric.ClosedCards[Swimlanes[0]]);
+			Equal(0, metric.ClosedCards[Swimlanes[1]]);
+			Equal(0, metric.ClosedCards[Swimlanes[2]]);
 		}
 	}
 }

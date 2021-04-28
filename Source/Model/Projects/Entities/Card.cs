@@ -3,19 +3,19 @@ using System.Collections.Generic;
 
 namespace Model
 {
-	public class GiraTask
+	public class Card
 	{
-		public int Id { get; private set; }
+		public int Id { get; }
 
-		public DateTime CreatedAt { get; private set; }
+		public DateTime CreatedAt { get; }
 
-		public DateTime? ClosedAt { get; private set; }
+		public DateTime? ClosedAt { get; }
 
-		public string Title { get; private set; }
+		public string Title { get; }
 
-		public IReadOnlyCollection<string> Labels { get; private set; }
+		public IReadOnlyCollection<string> Labels { get; }
 
-		public GiraTask(
+		public Card(
 			int id,
 			DateTime createdAt,
 			DateTime? closedAt,
