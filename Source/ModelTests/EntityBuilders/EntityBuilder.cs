@@ -6,7 +6,7 @@ namespace ModelTests
 {
 	public abstract class EntityBuilder<TEntity, TBuilder> where TBuilder : EntityBuilder<TEntity, TBuilder>
 	{
-		protected Dictionary<string, object> Values { get; } = new();
+		private Dictionary<string, object> Values { get; } = new();
 
 		protected TBuilder SetValue<TValue>(
 			Expression<Func<TEntity, TValue>> accessor,
