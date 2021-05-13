@@ -16,14 +16,14 @@ namespace WebAPI
 
 		public string[] Labels { get; set; }
 
-		public static CardDto BuildFrom(Card giraTask)
+		public static CardDto BuildFrom(Card card)
 		{
 			return new CardDto {
-				Id = giraTask.Id,
-				CreatedAt = giraTask.CreatedAt,
-				ClosedAt = giraTask.ClosedAt,
-				Title = giraTask.Title,
-				Labels = giraTask.Labels.ToArray()
+				Id = card.Id,
+				CreatedAt = card.CreatedAt,
+				ClosedAt = card.ClosedAt,
+				Title = card.Title,
+				Labels = card.Labels.ToArray()
 			};
 		}
 	}

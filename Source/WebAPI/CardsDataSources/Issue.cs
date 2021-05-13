@@ -15,7 +15,7 @@ namespace WebAPI
 
 		public IReadOnlyCollection<string> Labels { get; }
 
-		public IReadOnlyCollection<int> ProjectIds { get; }
+		public IReadOnlyCollection<IssueLocation> Locations { get; }
 
 		public Issue(
 			int id,
@@ -23,14 +23,14 @@ namespace WebAPI
 			DateTime? closedAt,
 			string title,
 			string[] labels,
-			int[] projectIds)
+			IssueLocation[] locations)
 		{
 			Id = id;
 			CreatedAt = createdAt;
 			ClosedAt = closedAt;
 			Title = title;
 			Labels = labels;
-			ProjectIds = projectIds;
+			Locations = locations;
 		}
 	}
 }

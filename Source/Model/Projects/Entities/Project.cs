@@ -8,7 +8,7 @@ namespace Model
 
 		public string Name { get; }
 
-		public int SprintLength { get; } = 7;
+		public int SprintLength { get; } = 28;
 
 		public DateTime BeginSprintsAt { get; }
 

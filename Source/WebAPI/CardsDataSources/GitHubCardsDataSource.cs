@@ -34,7 +34,8 @@ namespace WebAPI
 			return GetRepositoryIssues(
 					installationId: project.GitHubSettings.InstallationId,
 					repositoryId: project.GitHubSettings.RepositoryId)
-				.Where(issue => issue.ProjectIds
+				.Where(issue => issue.Locations
+					.Select(location => location.ProjectId)
 					.ContainsAnyOf(project.GitHubSettings.AllowedProjectIds))
 				.Select(issue => new Card(
 					id: issue.Id,
@@ -50,7 +51,8 @@ namespace WebAPI
 			_repositoryIssuesQuery = new Gql.Query()
 				.Repository(Var("name"), Var("login"))
 				.Issues(orderBy: new GqlModel.IssueOrder {
-					Field = GqlModel.IssueOrderField.UpdatedAt
+					Field = GqlModel.IssueOrderField.CreatedAt,
+					Direction = GqlModel.OrderDirection.Desc
 				})
 				.AllPages()
 				.Select(issue => new Issue(
@@ -69,7 +71,10 @@ namespace WebAPI
 					issue
 						.ProjectCards(null, null, null, null, null)
 						.AllPages()
-						.Select(projectCard => projectCard.Project.DatabaseId.Value)
+						.Select(projectCard => new IssueLocation(
+							projectCard.Project.DatabaseId.Value,
+							projectCard.Project.Name,
+							projectCard.Column.Name))
 						.ToList()
 						.ToArray()))
 				.Compile();

@@ -19,14 +19,14 @@ namespace Model
 			return new Project(
 				id: 0,
 				name: "mindbox-moscow/issues-devx",
-				beginSprintsAt: new(2021, 01, 01),
+				beginSprintsAt: new(2021, 05, 06),
 				gitHubSettings: new GitHubSettings(
 					installationId: 15161810,
 					repositoryId: 229932826,
 					swimlanes: new[] {
-						new Swimlane(0, "Bugs", "bug"),
-						new Swimlane(1, "Tech Debts", "tech debt"),
-						new Swimlane(2, "Road Map", "road map")
+						new Swimlane(0, "Bugs", "Bug"),
+						new Swimlane(1, "Tech Debts", "Полоса: Техдолг"),
+						new Swimlane(2, "Road Map", "Полоса: Роадмеп")
 					},
 					allowedProjectIds: new[] { 4241787 }));
 		}

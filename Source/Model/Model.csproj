@@ -6,9 +6,6 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
-    <PackageReference Include="GitHubJwt" Version="0.0.4" />
-    <PackageReference Include="Octokit" Version="0.50.0" />
-    <PackageReference Include="Octokit.GraphQL" Version="0.1.7-beta" />
   </ItemGroup>
 
 </Project>
