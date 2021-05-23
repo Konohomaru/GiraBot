@@ -1,26 +1,21 @@
 ﻿using Model;
-using System;
-using System.Collections.Generic;
+using System.Linq;
 
 namespace WebAPI
 {
 	public class CardCycleTimeNodeDto
 	{
-		public string Title { get; set; }
+		public int? Duration { get; set; }
 
-		public DateTime CreatedAt { get; set; }
-
-		public DateTime? ClosedAt { get; set; }
-
-		public IReadOnlyCollection<string> Labels { get; set; }
+		public CardDto[] Cards { get; set; }
 
 		public static CardCycleTimeNodeDto BuildFrom(CardCycleTimeNode node)
 		{
 			return new CardCycleTimeNodeDto {
-				Title = node.Title,
-				CreatedAt = node.CreatedAt,
-				ClosedAt = node.ClosedAt,
-				Labels = node.Labels
+				Duration = node.Duration,
+				Cards = node.Cards
+					.Select(card => CardDto.BuildFrom(card))
+					.ToArray()
 			};
 		}
 	}
