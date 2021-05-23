@@ -23,20 +23,23 @@ namespace Model
 		{
 			var orderedByDuration = cards.OrderBy(GetDuration);
 
-			for (int i = 0; i < orderedByDuration.Count(); ++i) {
+			for (int i = 0; i < orderedByDuration.Count(); ) {
 				yield return new CardCycleTimeNode(
 					duration: GetDuration(orderedByDuration.ElementAt(i)),
 					cards: cards
 						.Where(card => GetDuration(card) == GetDuration(orderedByDuration.ElementAt(i)))
 						.ToArray());
 
-				i += orderedByDuration.Count(card => GetDuration(card) == GetDuration(orderedByDuration.ElementAt(i)));
+				i += orderedByDuration
+					.Skip(i)
+					.TakeWhile(card => GetDuration(card) == GetDuration(orderedByDuration.ElementAt(i)))
+					.Count();
 			}
-		}
 
-		private static int? GetDuration(Card card)
-		{
-			return (card.ClosedAt - card.CreatedAt)?.Days + 1;
+			static int? GetDuration(Card card)
+			{
+				return (card.ClosedAt - card.CreatedAt)?.Days + 1;
+			}
 		}
 	}
 }
