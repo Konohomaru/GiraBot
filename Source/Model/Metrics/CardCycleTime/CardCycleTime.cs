@@ -16,25 +16,11 @@ namespace Model
 		{
 			var cards = Repository.GetProjectCards(projectId);
 
-			return GetMetricNodes(cards).ToArray();
-		}
-
-		private static IEnumerable<CardCycleTimeNode> GetMetricNodes(IReadOnlyCollection<Card> cards)
-		{
-			var orderedByDuration = cards.OrderBy(GetDuration);
-
-			for (int i = 0; i < orderedByDuration.Count(); ) {
-				yield return new CardCycleTimeNode(
-					duration: GetDuration(orderedByDuration.ElementAt(i)),
-					cards: cards
-						.Where(card => GetDuration(card) == GetDuration(orderedByDuration.ElementAt(i)))
-						.ToArray());
-
-				i += orderedByDuration
-					.Skip(i)
-					.TakeWhile(card => GetDuration(card) == GetDuration(orderedByDuration.ElementAt(i)))
-					.Count();
-			}
+			return cards
+				.GroupBy(GetDuration)
+				.Select(group => new CardCycleTimeNode(group.Key, group.ToArray()))
+				.OrderBy(node => node.Duration)
+				.ToArray();
 
 			static int? GetDuration(Card card)
 			{
