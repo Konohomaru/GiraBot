@@ -28,10 +28,10 @@ namespace Model
 				.GetSprintCards(latestSprint)
 				.ToArray();
 
-			return GetMetricNodes(latestSprint, projectSwimlanes, sprintCards).ToArray();
+			return GetNodes(latestSprint, projectSwimlanes, sprintCards).ToArray();
 		}
 
-		private IEnumerable<VelocityNode> GetMetricNodes(
+		private IEnumerable<VelocityNode> GetNodes(
 			Sprint latestSprint,
 			IReadOnlyCollection<Swimlane> swimlanes,
 			IReadOnlyCollection<Card> sprintCards)

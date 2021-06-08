@@ -5,9 +5,9 @@ namespace Model
 {
 	public class VelocityNode
 	{
-		public DateTime Day { get; set; }
+		public DateTime Day { get; }
 
-		public IDictionary<Swimlane, int> ClosedCards { get; set; }
+		public IDictionary<Swimlane, int> ClosedCards { get; }
 
 		public VelocityNode(DateTime day, IDictionary<Swimlane, int> closedCards)
 		{

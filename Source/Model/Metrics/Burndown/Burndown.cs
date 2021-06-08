@@ -26,10 +26,10 @@ namespace Model
 				.GetSprintCards(latestSprint)
 				.ToArray();
 
-			return GetMetricNodes(latestSprint, sprintCards).ToArray();
+			return GetNodes(latestSprint, sprintCards).ToArray();
 		}
 
-		private IEnumerable<BurndownNode> GetMetricNodes(Sprint latestSprint, IReadOnlyCollection<Card> sprintCards)
+		private IEnumerable<BurndownNode> GetNodes(Sprint latestSprint, IReadOnlyCollection<Card> sprintCards)
 		{
 			var today = Calendar.GetCurrentUtcDateTime();
 			var iterationDay = latestSprint.BeginsAt;
